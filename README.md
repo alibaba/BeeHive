@@ -1,8 +1,12 @@
 # BeeHive
 
+[![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
+[![License](https://img.shields.io/cocoapods/l/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
+[![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
 
 ##1. Abstract
-BeeHive is iOS app of the programming framework for implementing the program , it absorbed the Spring Framework API service concept to achieve the coupling between modules.
+
+BeeHive is a modular program of implementation in iOS , it absorbed the Spring Framework API service concept to avoid to directly coupling between modules.
 
 ##2. The basic principle is as follows:
 ![](http://gtms02.alicdn.com/tps/i2/TB1dhyFIFXXXXavaXXX7jjbSFXX-515-233.jpg_400x400.jpg)
@@ -16,7 +20,7 @@ BeeHive is iOS app of the programming framework for implementing the program , i
 
 BeeHive bases on Spring Service concept, although you can make and implement specific interfaces decoupling between modules , but can not avoid interface class dependencies.
 
-Why not use invoke and dynamic link library technology for decoupling interface , similar to Apache 's DSO way4?
+Why not use invoke and dynamic link library technology for decoupling interface , similar to Apache 's DSO way?
 
 Mainly on account of the difficulty and cost of learning to achieve , and dynamic invocation interface parameters can not be able to check phase change problems at compile time , dynamic programming techniques require a higher threshold requirement.
 
@@ -24,7 +28,7 @@ BeeHive inspired by the honeycomb . Honeycomb is the world's highly modular engi
 
 
 ## 4.Observer the change in life run loop 
-### 1. event
+### 1. Event
 BeeHive's Each module will provide life-cycle events for the host environment and Each module necessary information exchange to BeeHive.
 Events are divided into three types:
 
@@ -70,7 +74,7 @@ BH_EXPORT_MODULE(YES)
 
 If the module is set to export BH_EXPORT_MODULE (YES), it will initialize asynchronous execution module can be optimized before starting after the first screen shows the contents of the start time consuming
 
-### 6. programming
+### 6. Programming
 BHModuleProtocol provides various modules each module can hook functions , and logic for implementing the plug-in code, you can fine protocol in BHModuleProtocol.h
 
 Setting environment variables
@@ -91,7 +95,7 @@ break;
 ```
 
 
-*  module init
+*  Module Init
 
 If the module there is need to start initialization logic can modInit in the preparation of , for example, the module can register an external module interface to access the Service
 
@@ -172,7 +176,7 @@ id< HomeServiceProtocol > homeVc = [[BeeHive shareInstance] createService:@proto
 
 ```
 
-#### singleton or several instance
+#### Singleton or several instance
 For some scenes , we visit each declared as service objects , objects can hope to retain some of the state , then we need to declare this service object is a singleton object .
 
 We only need to implement the function declaration in the event service objects
@@ -189,7 +193,7 @@ The object was acquired by createService singleton object , if the function retu
 ```
 id< HomeServiceProtocol > homeVc = [[BeeHive shareInstance] createService:@protocol(HomeServiceProtocol)];
 ```
-## global Context
+## Global Context
 
 Initial setup application project information , and share information across applications among modules
 
@@ -232,7 +236,7 @@ return YES;
 ## Integrated approach
 * use cocoapods 
 
-pod "BeeHive", '1.0.0.0'
+pod "BeeHive", '1.0.0'
 
 ## author
 
