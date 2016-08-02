@@ -5,11 +5,15 @@ Pod::Spec.new do |s|
   s.version      = "1.0.0"
   s.summary      = "BeeHive is a kind of modular programming method"
 
-  s.description  = <<Developer can use BeeHive make iOS programming easier
+  s.description  = <<-DESC
+                      Developer can use BeeHive make iOS programming easier
+                    DESC
 
   s.homepage     = "https://github.com/alibaba/BeeHive/"
 
   s.license      = "GPL"
+
+  s.platform = :ios, '7.0'
 
   s.author       = { "soxeon" => "dpsopower@gmail.com" }
 
@@ -17,5 +21,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'BeeHive/*.{h,m}'
   s.resource = 'BeeHive/*.bundle'
+  s.frameworks = 'QuartzCore','UIKit'
 
 end
