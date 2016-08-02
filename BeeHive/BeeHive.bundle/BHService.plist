@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>service</key>
+		<string>HomeServiceProtocol</string>
+		<key>impl</key>
+		<string>BHViewController</string>
+	</dict>
+	<dict>
+		<key>service</key>
+		<string>UserTrackServiceProtocol</string>
+		<key>impl</key>
+		<string>BHUserTrackViewController</string>
+	</dict>
+</array>
+</plist>
