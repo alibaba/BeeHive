@@ -1,0 +1,5 @@
+target 'BeeHive_Example', :exclusive => true do
+  pod "BeeHive", :path => "../"
+
+end
+
