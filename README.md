@@ -242,6 +242,6 @@ pod "BeeHive", '1.0.0.0'
 
 ## License
 
-BeeHive is available under the MIT license. See the LICENSE file for more info.
+BeeHive is available under the GPL license. See the LICENSE file for more info.
 
 
