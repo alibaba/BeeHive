@@ -1,4 +1,4 @@
-# BeeHive 英文文档
+# BeeHive
 
 
 ##1. Abstract
@@ -237,6 +237,7 @@ pod "BeeHive", '1.0.0.0'
 ## author
 
 一渡, shijie.qinsj@alibaba-inc.com
+
 达兹, dazi.dp@alibaba-inc.com
 
 ## License
