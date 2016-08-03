@@ -84,13 +84,13 @@ By context.env we can judge our application environment state to decide how we c
 ```
 -(void)modSetup:(BHContext *)context
 {
-switch (context.env) {
-case BHEnvironmentDev:
-break;
-case BHEnvironmentProd:
-default:
-break;
-}
+	switch (context.env) {
+		case BHEnvironmentDev:
+		break;
+		case BHEnvironmentProd:
+		default:
+		break;
+	}
 }
 ```
 
@@ -102,7 +102,7 @@ If the module there is need to start initialization logic can modInit in the pre
 ```
 -(void)modInit:(BHContext *)context
 {
-[[BeeHive shareInstance] registerService:@protocol(UserTrackServiceProtocol) service:[BHUserTrackViewController class]];
+	[[BeeHive shareInstance] registerService:@protocol(UserTrackServiceProtocol) service:[BHUserTrackViewController class]];
 }
 ```
 
@@ -115,7 +115,7 @@ Event system will be passed to each module , so that each module to decide to wr
 ```
 -(void)modQuickAction:(BHContext *)context
 {
-[self process:context.shortcutItem handler:context.scompletionHandler];
+	[self process:context.shortcutItem handler:context.scompletionHandler];
 }
 ```
 
@@ -184,7 +184,7 @@ We only need to implement the function declaration in the event service objects
 ```
 -(BOOL) singleton
 {
-return YES;
+	return YES;
 }
 
 ```
@@ -201,33 +201,33 @@ Initial setup application project information , and share information across app
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-[BHContext shareInstance].env ＝ BHEnvironmentDev; 
-
-[BHContext shareInstance].application = application;
-[BHContext shareInstance].launchOptions = launchOptions;
-
-[BHContext shareInstance].moduleConfigName = @"BeeHive.bundle/CustomModulePlist";
-[BHContext shareInstance].serviceConfigName =  @"BeeHive.bundle/CustomServicePlist";
-
-[BHContext shareInstance].appkey  = xxxxxx;
-[BHContext shareInstance].Mtopkey  = xxxxx;
-
-
-[[BeeHive shareInstance] setContext:[BHContext shareInstance]];
-
-[super application:application didFinishLaunchingWithOptions:launchOptions];
-
-
-id<HomeServiceProtocol> homeVc = [[BeeHive shareInstance] createService:@protocol(HomeServiceProtocol)];
-
-
-if ([homeVc isKindOfClass:[UIViewController class]]) {
-UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:(UIViewController*)homeVc];
-
-self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-self.window.rootViewController = navCtrl;
-
-[self.window makeKeyAndVisible];
+	[BHContext shareInstance].env ＝ BHEnvironmentDev; 
+	
+	[BHContext shareInstance].application = application;
+	[BHContext shareInstance].launchOptions = launchOptions;
+	
+	[BHContext shareInstance].moduleConfigName = @"BeeHive.bundle/CustomModulePlist";
+	[BHContext shareInstance].serviceConfigName =  @"BeeHive.bundle/CustomServicePlist";
+	
+	[BHContext shareInstance].appkey  = xxxxxx;
+	[BHContext shareInstance].Mtopkey  = xxxxx;
+	
+	
+	[[BeeHive shareInstance] setContext:[BHContext shareInstance]];
+	
+	[super application:application didFinishLaunchingWithOptions:launchOptions];
+	
+	
+	id<HomeServiceProtocol> homeVc = [[BeeHive shareInstance] createService:@protocol(HomeServiceProtocol)];
+	
+	
+	if ([homeVc isKindOfClass:[UIViewController class]]) {
+	UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:(UIViewController*)homeVc];
+	
+	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.window.rootViewController = navCtrl;
+	
+	[self.window makeKeyAndVisible];
 }
 
 return YES;
