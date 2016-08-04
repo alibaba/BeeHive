@@ -7,7 +7,7 @@ def pods
 end
 
 target 'BeeHive_Example' do
-  pods
+	pods
 end
 
 target 'BeeHive_Tests' do
