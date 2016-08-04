@@ -1,5 +1,16 @@
-target 'BeeHive_Example', :exclusive => true do
-  pod "BeeHive", :path => "../"
+source 'https://github.com/CocoaPods/Specs.git'
 
+platform :ios, '7.0'
+
+def pods
+	pod "BeeHive", :path => "../"
+end
+
+target 'BeeHive_Example' do
+  pods
+end
+
+target 'BeeHive_Tests' do
+	pods
 end
 
