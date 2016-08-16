@@ -3,6 +3,9 @@
 [![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
 [![License](https://img.shields.io/cocoapods/l/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
 [![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
+
+
+---
 ![](http://gtms04.alicdn.com/tps/i4/TB1sc5IIFXXXXXOaXXXmZ78YFXX-1100-600.png_200x200.jpg)
 
 
