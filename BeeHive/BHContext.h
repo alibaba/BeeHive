@@ -23,7 +23,7 @@ typedef enum
 @interface BHContext : NSObject
 
 //global env
-@property(nonatomic, readonly) BHEnvironmentType env;
+@property(nonatomic, assign) BHEnvironmentType env;
 
 //global config
 @property(nonatomic, strong) BHConfig *config;
