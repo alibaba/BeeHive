@@ -61,13 +61,4 @@ typedef enum
 +(instancetype) shareInstance;
 
 
-//设置对象在全局上下文中可见
--(void)setVisibility:(Protocol *)proto service:(id<BHServiceProtocol>) service __attribute((deprecated(("使用serviceprotocol协议中的singleton来注册单例"))));
-
-//在全局上下文中获取对象
--(id<BHServiceProtocol>) serviceInstance:(Protocol *)proto __attribute((deprecated(("使用serviceprotocol协议中的singleton来注册单例, 用CreateService来获取单例"))));
-
-//设置对象在全局上下文中可见
--(void)setInvisibility:(Protocol *)proto __attribute((deprecated(("废弃没有什么作用"))));
-
 @end
