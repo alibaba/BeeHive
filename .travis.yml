@@ -1,0 +1,4 @@
+language: objective-c
+xcode_project: BeeHive.xcodeproj 
+xcode_scheme: BeeHive
+
