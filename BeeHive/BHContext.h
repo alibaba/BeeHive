@@ -31,8 +31,6 @@ typedef enum
 //application appkey
 @property(nonatomic, strong) NSString *appkey;
 
-//application Mtop appkey
-@property(nonatomic, strong) NSString *Mtopkey;
 
 @property(nonatomic, strong) UIApplication *application;
 
