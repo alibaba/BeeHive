@@ -26,7 +26,10 @@
         self.moduleConfigName = @"BeeHive.bundle/BeeHive";
         self.serviceConfigName = @"BeeHive.bundle/BHService";
       
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > 80400
         self.touchShortcutItem = [BHShortcutItem new];
+#endif
+
         self.openURLItem = [BHOpenURLItem new];
         self.notificationsItem = [BHNotificationsItem new];
         self.userActivityItem = [BHUserActivityItem new];
@@ -49,27 +52,6 @@
     
     return BHInstance;
 }
-
-
--(void)setVisibility:(Protocol *)proto service:(id<BHServiceProtocol>) service
-{
-    if ([service conformsToProtocol:proto]) {
-        [((NSMutableDictionary *)self.servicesByName) setObject:service forKey:NSStringFromProtocol(proto)];
-    }
-}
-
--(id<BHServiceProtocol>) serviceInstance:(Protocol *)proto
-{
-    return [((NSMutableDictionary *)self.servicesByName) objectForKey:NSStringFromProtocol(proto)];
-}
-
--(void)setInvisibility:(Protocol *)proto
-{
-    if ([self.servicesByName objectForKey:NSStringFromProtocol(proto)]) {
-        [((NSMutableDictionary *)self.servicesByName) removeObjectForKey:NSStringFromProtocol(proto)];
-    }
-}
-
 
 
 @end
