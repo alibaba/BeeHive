@@ -92,14 +92,15 @@ Events are divided into three types:
 
 System events are usually Application life-cycle events , such as DidBecomeActive, WillEnterBackground etc.
 System Event basic workflow is as follows:
-![](http://gtms01.alicdn.com/tps/i1/TB1OrsXIFXXXXaoXFXXjWC18pXX-1119-552.jpg) 
+![](Doc/img-xx11.png)
 
 ## 1.2 Universal Event
 
 On the basis of system events on the extended general application events , such modSetup, modInit , etc. , may be used to code each plug-in module initialization settings
 
 Extended common events are as follows :
-![](http://gtms04.alicdn.com/tps/i4/TB1lOH5IFXXXXX6XVXXZJGkYVXX-1523-552.jpg) 
+![](Doc/img-xx12.png) 
+
 
 ## 1.3 Business Custom Event
 
@@ -187,7 +188,7 @@ Usually in the form of three types to access service:
 2. by `Export Method`(like `PHP`/`ReactNatve` extension)
 3. by `URL Route` pattern(like interaction between iPhone apps)
 
-Interface type of service access can take the advantages of compile-time checking is found to change the interface , so that timely correction interface issues . The disadvantage is the need to rely on the interface definition header file by the module increases the more the maintenance interface definition there is a certain amount of work . 
+Interface type of service access can take the advantages of compile-time checking is found to change the interface , so that timely correction interface issues . The disadvantage is the need to rely on the interface definition header file by the module increases the more the maintenance interface definition there is a certain amount of work .
 
 ### 3.4.1 Declare service interface
 
@@ -206,7 +207,7 @@ Case thought HomeServiceProtocol:
 There are three ways to register ViewController Service.
 
 #### Declarative registration
- 
+
 ```objc
 @implementation HomeService
 
@@ -214,9 +215,9 @@ BH_EXPORT_SERVICE()
 
 @end
 ```
-	
+
 #### API registration
- 
+
 ```objc
 [[BeeHive shareInstance] registerService:@protocol(HomeServiceProtocol) service:[BHViewController class]];
 ```
@@ -271,32 +272,32 @@ Initial setup application project information , and share information across app
 ```objc
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	[BHContext shareInstance].env ＝ BHEnvironmentDev; 
-	
+	[BHContext shareInstance].env ＝ BHEnvironmentDev;
+
 	[BHContext shareInstance].application = application;
 	[BHContext shareInstance].launchOptions = launchOptions;
-	
+
 	[BHContext shareInstance].moduleConfigName = @"BeeHive.bundle/CustomModulePlist";
 	[BHContext shareInstance].serviceConfigName =  @"BeeHive.bundle/CustomServicePlist";
-	
+
 	[BHContext shareInstance].appkey  = xxxxxx;
 	[BHContext shareInstance].Mtopkey  = xxxxx;
-	
-	
+
+
 	[[BeeHive shareInstance] setContext:[BHContext shareInstance]];
-	
+
 	[super application:application didFinishLaunchingWithOptions:launchOptions];
-	
-	
+
+
 	id<HomeServiceProtocol> homeVc = [[BeeHive shareInstance] createService:@protocol(HomeServiceProtocol)];
-	
-	
+
+
 	if ([homeVc isKindOfClass:[UIViewController class]]) {
 		UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:(UIViewController*)homeVc];
-		
+
 		self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 		self.window.rootViewController = navCtrl;
-		
+
 		[self.window makeKeyAndVisible];
 	}
 
