@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-
+NS_ASSUME_NONNULL_BEGIN
 
 @interface BHWatchDog : NSObject
 
 - (instancetype)initWithThreshold:(double)threshold strictMode:(BOOL)strictMode;
 
 @end
+
+NS_ASSUME_NONNULL_END

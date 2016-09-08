@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class BHContext;
 @class BeeHive;
 
@@ -17,7 +19,6 @@
 
 
 @protocol BHModuleProtocol <NSObject>
-
 
 @optional
 
@@ -69,5 +70,6 @@
 
 - (void)modDidUpdateContinueUserActivity:(BHContext *)context;
 
-
 @end
+
+NS_ASSUME_NONNULL_END

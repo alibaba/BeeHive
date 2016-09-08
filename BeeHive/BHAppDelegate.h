@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-
 @interface BHAppDelegate : UIResponder <UIApplicationDelegate>
 
 @end
@@ -39,8 +38,8 @@ typedef void (^shortcutItemCompletionHandler)(BOOL);
 @interface BHShortcutItem : NSObject
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > 80400
-@property(nonatomic, strong) UIApplicationShortcutItem *shortcutItem;
-@property(nonatomic, copy) shortcutItemCompletionHandler scompletionHandler;
+@property (nonatomic, strong) UIApplicationShortcutItem *shortcutItem;
+@property (nonatomic, copy) shortcutItemCompletionHandler scompletionHandler;
 #endif
 
 @end

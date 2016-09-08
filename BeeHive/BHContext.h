@@ -11,38 +11,39 @@
 #import "BHConfig.h"
 #import "BHAppDelegate.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef enum
 {
     BHEnvironmentDev = 0,
     BHEnvironmentTest,
     BHEnvironmentStage,
     BHEnvironmentProd
-}BHEnvironmentType;
+} BHEnvironmentType;
 
 
 @interface BHContext : NSObject
 
 //global env
-@property(nonatomic, assign) BHEnvironmentType env;
+@property (nonatomic, assign) BHEnvironmentType env;
 
 //global config
-@property(nonatomic, strong) BHConfig *config;
+@property (nonatomic, strong) BHConfig *config;
 
 //application appkey
-@property(nonatomic, strong) NSString *appkey;
+@property (nonatomic, strong) NSString *appkey;
 
+@property (nonatomic, strong) UIApplication *application;
 
-@property(nonatomic, strong) UIApplication *application;
+@property (nonatomic, strong) NSDictionary *launchOptions;
 
-@property(nonatomic, strong) NSDictionary *launchOptions;
+@property (nonatomic, strong) NSString *moduleConfigName;
 
-@property(nonatomic, strong) NSString *moduleConfigName;
+@property (nonatomic, strong) NSString *serviceConfigName;
 
-@property(nonatomic, strong) NSString *serviceConfigName;
+@property (nonatomic, strong) NSMutableDictionary *modulesByName;
 
-@property(nonatomic, strong) NSMutableDictionary *modulesByName;
-
-@property(nonatomic, strong) NSMutableDictionary *servicesByName;
+@property (nonatomic, strong) NSMutableDictionary *servicesByName;
 
 //3D-Touch model
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > 80400
@@ -58,7 +59,8 @@ typedef enum
 //user Activity Model
 @property (nonatomic, strong) BHUserActivityItem *userActivityItem;
 
-+(instancetype) shareInstance;
-
++ (instancetype)shareInstance;
 
 @end
+
+NS_ASSUME_NONNULL_END

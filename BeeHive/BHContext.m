@@ -17,7 +17,7 @@
 
 @implementation BHContext
 
--(instancetype)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -38,7 +38,7 @@
     return self;
 }
 
-+(instancetype) shareInstance
++ (instancetype) shareInstance
 {
     static dispatch_once_t p;
     static id BHInstance = nil;

@@ -8,40 +8,40 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface BHConfig : NSObject
 
++ (instancetype)shareInstance;
 
++ (nullable id)get:(NSString *)key;
 
-+(instancetype) shareInstance;
++ (BOOL)has:(NSString *)key;
 
-+(id)get:(NSString *)key;
++ (void)add:(NSDictionary *)parameters;
 
-+(BOOL)has:(NSString *)key;
++ (NSMutableDictionary *)getAll;
 
-+(void) add:(NSDictionary *)parameters;
++ (nullable NSString *)stringValue:(NSString *)key;
 
-+(NSMutableDictionary *) getAll;
++ (nullable NSDictionary *)dictionaryValue:(NSString *)key;
 
++ (NSInteger)integerValue:(NSString *)key;
 
-+(NSString *)stringValue:(NSString *)key;
++ (float)floatValue:(NSString *)key;
 
-+(NSDictionary *)dictionaryValue:(NSString *)key;
++ (BOOL)boolValue:(NSString *)key;
 
-+(NSInteger)integerValue:(NSString *)key;
++ (nullable NSArray *)arrayValue:(NSString *)key;
 
-+(float)floatValue:(NSString *)key;
++ (void)set:(NSString *)key value:(id)value;
 
-+(BOOL)boolValue:(NSString *)key;
++ (void)set:(NSString *)key boolValue:(BOOL)value;
 
-+(NSArray *)arrayValue:(NSString *)key;
++ (void)set:(NSString *)key integerValue:(NSInteger)value;
 
-+(void)set:(NSString *)key value:(id)value;
-
-+(void)set:(NSString *)key boolValue:(BOOL)value;
-
-+(void)set:(NSString *)key integerValue:(NSInteger)value;
-
-+(void)clear;
-
++ (void)clear;
 
 @end
+
+NS_ASSUME_NONNULL_END

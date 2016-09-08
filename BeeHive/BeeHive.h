@@ -13,6 +13,8 @@
 #import "BHModuleManager.h"
 #import "BHServiceManager.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface BeeHive : NSObject
 
 //save application global context
@@ -22,7 +24,7 @@
 
 + (instancetype)shareInstance;
 
-+ (void)registerDynamicModule:(Class) moduleClass;
++ (void)registerDynamicModule:(Class)moduleClass;
 
 - (id)createService:(Protocol *)proto;
 
@@ -30,3 +32,5 @@
 -(void)registerService:(Protocol *)proto service:(Class) serviceClass;
 
 @end
+
+NS_ASSUME_NONNULL_END

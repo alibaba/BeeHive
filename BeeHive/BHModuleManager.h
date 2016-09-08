@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class BHContext;
 
 typedef NS_ENUM(NSUInteger, BHModuleLevel)
@@ -42,7 +44,6 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
     
 };
 
-
 @class BHModule;
 
 @interface BHModuleManager : NSObject
@@ -65,3 +66,4 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 
 @end
 
+NS_ASSUME_NONNULL_END
