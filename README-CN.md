@@ -85,7 +85,7 @@
 
 系统事件基本工作流如下：
 
-![](http://gtms01.alicdn.com/tps/i1/TB1OrsXIFXXXXaoXFXXjWC18pXX-1119-552.jpg)
+![](https://img.alicdn.com/tps/TB1AyreNFXXXXbPXpXXXXXXXXXX-1774-704.jpg)
 
 ## 1.2 通用事件
 
