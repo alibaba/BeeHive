@@ -101,7 +101,7 @@ On the basis of system events on the extended general application events , such 
 
 Extended common events are as follows :
 
-![](Docs/extended-common-events-en.png)
+![](https://img.alicdn.com/tps/TB1jzGJNFXXXXabapXXXXXXXXXX-1840-552.jpg)
 
 ## 1.3 Business Custom Event
 
