@@ -93,7 +93,7 @@ Events are divided into three types:
 System events are usually Application life-cycle events , such as DidBecomeActive, WillEnterBackground etc.
 System Event basic workflow is as follows:
 
-![](https://img.alicdn.com/tps/TB13mjlNFXXXXcpXXXXXXXXXXXX-1748-590.jpg)
+![](https://img.alicdn.com/tps/TB1d_qQNFXXXXc3XVXXXXXXXXXX-1748-544.jpg)
 
 ## 1.2 Universal Event
 
