@@ -93,7 +93,7 @@
 
 扩展的通用事件如下：
 
-![](http://gtms04.alicdn.com/tps/i4/TB1lOH5IFXXXXX6XVXXZJGkYVXX-1523-552.jpg)  
+![](https://img.alicdn.com/tps/TB12bOINFXXXXblapXXXXXXXXXX-1848-640.jpg)  
 
 ## 1.3 业务自定义事件
 
