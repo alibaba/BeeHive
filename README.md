@@ -1,5 +1,7 @@
 # BeeHive [![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![License](https://img.shields.io/cocoapods/l/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive)
 
+[![Join the chat at https://gitter.im/alibaba/BeeHive](https://badges.gitter.im/alibaba/BeeHive.svg)](https://gitter.im/alibaba/BeeHive?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 :book: English Documentation | [:book: 中文文档](README-CN.md)
 
 <img src="http://gtms04.alicdn.com/tps/i4/TB1sc5IIFXXXXXOaXXXmZ78YFXX-1100-600.png_400x400.jpg" vspace="10px" align="right" >
