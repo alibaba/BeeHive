@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class BHContext;
 
 @interface BHServiceManager : NSObject
@@ -26,3 +28,5 @@
 - (id)createService:(Protocol *)service;
 
 @end
+
+NS_ASSUME_NONNULL_END

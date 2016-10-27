@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface BHTimeProfiler : NSObject
 
 #pragma mark - Open API
@@ -25,3 +27,5 @@
 - (void)postTimeProfileResultNotification;
 
 @end
+
+NS_ASSUME_NONNULL_END

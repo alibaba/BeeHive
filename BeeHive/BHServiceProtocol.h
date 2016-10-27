@@ -12,6 +12,6 @@
 
 @optional
 
--(BOOL)singleton;
+- (BOOL)singleton;
 
 @end
