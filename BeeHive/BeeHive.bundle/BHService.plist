@@ -4,12 +4,6 @@
 <array>
 	<dict>
 		<key>service</key>
-		<string>HomeServiceProtocol</string>
-		<key>impl</key>
-		<string>BHViewController</string>
-	</dict>
-	<dict>
-		<key>service</key>
 		<string>UserTrackServiceProtocol</string>
 		<key>impl</key>
 		<string>BHUserTrackViewController</string>

@@ -7,7 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
+#import "BHAnnotation.h"
 @class BHContext;
 @class BeeHive;
 
@@ -15,9 +15,7 @@
 + (void)load { [BeeHive registerDynamicModule:[self class]]; } \
 -(BOOL)async { return (BOOL)#isAsync;} 
 
-#define BeeHiveDATA __attribute((used, section("__DATA,BeeHive")))
-#define BeeHiveMod(name) \
-char * k##name##_mod BeeHiveDATA = ""#name"";
+
 
 @protocol BHModuleProtocol <NSObject>
 

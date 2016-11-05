@@ -82,6 +82,8 @@
     
     [[BHServiceManager sharedManager] registerLocalServices];
     
+    [[BHServiceManager sharedManager] registerAnnotationServices];
+    
 }
 
 @end

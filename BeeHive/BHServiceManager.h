@@ -21,6 +21,8 @@
 
 - (void)registerLocalServices;
 
+- (void)registerAnnotationServices;
+
 - (void)registerService:(Protocol *)service implClass:(Class)implClass;
 
 - (id)createService:(Protocol *)service;
