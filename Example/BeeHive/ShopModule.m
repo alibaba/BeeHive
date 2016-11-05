@@ -8,14 +8,11 @@
 
 #import "ShopModule.h"
 #import "BeeHive.h"
-
+BeeHiveMod(ShopModule)
 @interface ShopModule() <BHModuleProtocol>
 
 @end
-
 @implementation ShopModule
-
-BH_EXPORT_MODULE(NO)
 
 - (id)init{
     if (self = [super init])

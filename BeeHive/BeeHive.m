@@ -68,7 +68,10 @@
     
     [[BHModuleManager sharedManager] loadLocalModules];
     
+    [[BHModuleManager sharedManager] registedAnnotationModules];
+
     [[BHModuleManager sharedManager] registedAllModules];
+    
 }
 
 -(void)loadStaticServices

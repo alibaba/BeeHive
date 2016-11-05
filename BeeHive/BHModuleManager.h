@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 
 - (void)registedAllModules;
 
+- (void)registedAnnotationModules;
+
 - (void)tiggerEvent:(BHModuleEventType)eventType;
 
 @end
