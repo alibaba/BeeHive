@@ -7,7 +7,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
+#import "BHAnnotation.h"
 @protocol BHServiceProtocol <NSObject>
 
 @optional

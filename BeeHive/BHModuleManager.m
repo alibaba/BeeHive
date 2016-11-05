@@ -10,12 +10,7 @@
 #import "BHModuleProtocol.h"
 #import "BHContext.h"
 #import "BHTimeProfiler.h"
-#include <mach-o/getsect.h>
-#include <mach-o/loader.h>
-#include <mach-o/dyld.h>
-#include <dlfcn.h>
-#import <objc/runtime.h>
-#import <objc/message.h>
+#import "BHAnnotation.h"
 
 #define kModuleArrayKey     @"moduleClasses"
 #define kModuleInfoNameKey  @"moduleClass"
@@ -44,37 +39,7 @@ static  NSString *kDidUpdateContinueUserActivitySelector = @"modDidUpdateContinu
 static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUserActivity:";
 
 
-static NSArray<NSString *>* BHReadConfiguration()
-{
-    NSMutableArray *configs = [NSMutableArray array];
-    
-    Dl_info info;
-    dladdr(BHReadConfiguration, &info);
-    
-#ifndef __LP64__
-    //        const struct mach_header *mhp = _dyld_get_image_header(0); // both works as below line
-    const struct mach_header *mhp = (struct mach_header*)info.dli_fbase;
-    unsigned long size = 0;
-    uint32_t *memory = (uint32_t*)getsectiondata(mhp, "__DATA", "BeeHive", & size);
-#else /* defined(__LP64__) */
-    const struct mach_header_64 *mhp = (struct mach_header_64*)info.dli_fbase;
-    unsigned long size = 0;
-    uint64_t *memory = (uint64_t*)getsectiondata(mhp, "__DATA", "BeeHive", & size);
-#endif /* defined(__LP64__) */
-    
-    for(int idx = 0; idx < size/sizeof(void*); ++idx){
-        char *string = (char*)memory[idx];
-        
-        NSString *str = [NSString stringWithUTF8String:string];
-        if(!str)continue;
-        
-        NSLog(@"config = %@", str);
-        if(str) [configs addObject:str];
-    }
-    
-    return configs;
 
-}
 
 @interface BHModuleManager()
 
@@ -155,12 +120,8 @@ static NSArray<NSString *>* BHReadConfiguration()
 
 - (void)registedAnnotationModules
 {
-    static NSArray<NSString *> *mods = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        mods = BHReadConfiguration();
-    });
     
+    NSArray<NSString *>*mods = [BHAnnotation AnnotationModules];
     for (NSString *modName in mods) {
         Class cls;
         if (modName) {
