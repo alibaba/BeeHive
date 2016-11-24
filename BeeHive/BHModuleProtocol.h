@@ -7,13 +7,14 @@
  */
 
 #import <Foundation/Foundation.h>
-
+#import "BHAnnotation.h"
 @class BHContext;
 @class BeeHive;
 
 #define BH_EXPORT_MODULE(isAsync) \
 + (void)load { [BeeHive registerDynamicModule:[self class]]; } \
 -(BOOL)async { return (BOOL)#isAsync;} 
+
 
 
 @protocol BHModuleProtocol <NSObject>
