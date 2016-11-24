@@ -10,7 +10,7 @@
 #import "BHModuleProtocol.h"
 #import "BHContext.h"
 #import "BHTimeProfiler.h"
-
+#import "BHAnnotation.h"
 
 #define kModuleArrayKey     @"moduleClasses"
 #define kModuleInfoNameKey  @"moduleClass"
@@ -37,6 +37,8 @@ static  NSString *kWillContinueUserActivitySelector = @"modWillContinueUserActiv
 static  NSString *kContinueUserActivitySelector = @"modContinueUserActivity:";
 static  NSString *kDidUpdateContinueUserActivitySelector = @"modDidUpdateContinueUserActivity:";
 static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUserActivity:";
+
+
 
 
 @interface BHModuleManager()
@@ -115,6 +117,23 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
     [self.BHModules addObjectsFromArray:tmpArray];
     
 }
+
+- (void)registedAnnotationModules
+{
+    
+    NSArray<NSString *>*mods = [BHAnnotation AnnotationModules];
+    for (NSString *modName in mods) {
+        Class cls;
+        if (modName) {
+            cls = NSClassFromString(modName);
+            
+            if (cls) {
+                [self registerDynamicModule:cls];
+            }
+        }
+    }
+}
+
 
 - (void)tiggerEvent:(BHModuleEventType)eventType
 {
