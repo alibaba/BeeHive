@@ -179,7 +179,7 @@ BH_EXPORT_MODULE()  // 声明该类为模块入口
 通常会有三种形式的接口访问形式：
 
 1. 基于接口的实现`Service`访问方式（`Java spring`框架实现）
-1. 基于函数调用约定实现的`Export Method`(`PHP`的`extension`，`ReactNatve`的扩展机制)
+1. 基于函数调用约定实现的`Export Method`(`PHP`的`extension`，`ReactNative`的扩展机制)
 1. 基于跨应用实现的`URL Route`模式(`iPhone` `App`之间的互访)
 
 我们目前实现了第一种方式，后续会逐步实现后两种方式。
