@@ -205,17 +205,7 @@ Case thought HomeServiceProtocol:
 
 ### 3.4.2 Register Service
 
-There are three ways to register ViewController Service.
-
-#### Declarative registration
-
-```objc
-@implementation HomeService
-
-BH_EXPORT_SERVICE()
-
-@end
-```
+There are two ways to register ViewController Service.
 
 #### API registration
 
@@ -322,3 +312,5 @@ pod "BeeHive", '1.0.0'
 # 6. License
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
+
+

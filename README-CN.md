@@ -200,17 +200,8 @@ BH_EXPORT_MODULE()  // 声明该类为模块入口
 
 ### 3.4.2 注册`Service`
 
-有三种方式：
+有两种方式：
 
-#### 声明式注册
-
-```objc
-@implementation HomeService
-
-BH_EXPORT_SERVICE()
-
-@end
-```
 #### `API`注册
 
 ```objc
@@ -309,3 +300,5 @@ pod "BeeHive", '1.0.0'
 # 6. 开源许可证
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
+
+
