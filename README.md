@@ -186,7 +186,7 @@ Event prepared by treating the various business modules can plug-in programming 
 Usually in the form of three types to access service:
 
 1. by interface(like `Spring`)
-2. by `Export Method`(like `PHP`/`ReactNatve` extension)
+2. by `Export Method`(like `PHP`/`ReactNative` extension)
 3. by `URL Route` pattern(like interaction between iPhone apps)
 
 Interface type of service access can take the advantages of compile-time checking is found to change the interface , so that timely correction interface issues . The disadvantage is the need to rely on the interface definition header file by the module increases the more the maintenance interface definition there is a certain amount of work .
