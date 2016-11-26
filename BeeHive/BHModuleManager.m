@@ -15,6 +15,7 @@
 #define kModuleArrayKey     @"moduleClasses"
 #define kModuleInfoNameKey  @"moduleClass"
 #define kModuleInfoLevelKey @"moduleLevel"
+#define kModuleInfoInstanceKey @"moduleInstance"
 
 static  NSString *kSetupSelector = @"modSetUp:";
 static  NSString *kInitSelector = @"modInit:";
@@ -41,9 +42,7 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 
 @interface BHModuleManager()
 
-@property(nonatomic, strong) NSMutableArray     *BHModuleDynamicClasses;
-
-@property(nonatomic, strong)  NSMutableArray      *BHModules;
+@property(nonatomic, strong)  NSMutableArray *BHModules;//modules info
 
 
 @end
@@ -86,7 +85,7 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 
 - (void)registedAllModules
 {
-
+    
     [self.BHModules sortUsingComparator:^NSComparisonResult(NSDictionary *module1, NSDictionary *module2) {
       NSNumber *module1Level = (NSNumber *)[module1 objectForKey:kModuleInfoLevelKey];
       NSNumber *module2Level =  (NSNumber *)[module2 objectForKey:kModuleInfoLevelKey];
@@ -94,10 +93,9 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
         return [module1Level intValue] > [module2Level intValue];
     }];
     
-    NSMutableArray *tmpArray = [NSMutableArray array];
     
     //module init
-    [self.BHModules enumerateObjectsUsingBlock:^(NSDictionary *module, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.BHModules enumerateObjectsUsingBlock:^(NSMutableDictionary *module, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSString *classStr = [module objectForKey:kModuleInfoNameKey];
         
@@ -105,15 +103,10 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
         
         if (NSStringFromClass(moduleClass)) {
             id<BHModuleProtocol> moduleInstance = [[moduleClass alloc] init];
-            [tmpArray addObject:moduleInstance];
+            [module setObject:moduleInstance forKey:kModuleInfoInstanceKey];
         }
         
     }];
-    
-    [self.BHModules removeAllObjects];
-
-    [self.BHModules addObjectsFromArray:tmpArray];
-    
 }
 
 - (void)tiggerEvent:(BHModuleEventType)eventType
@@ -201,15 +194,6 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 
 #pragma mark - life loop
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.BHModuleDynamicClasses = [NSMutableArray array];
-    }
-    return self;
-}
-
 
 #pragma mark - private
 
@@ -288,8 +272,9 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 - (void)handleModulesInitEvent
 {
     
-    [self.BHModules enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.BHModules enumerateObjectsUsingBlock:^(NSDictionary *moduleInfo, NSUInteger idx, BOOL * _Nonnull stop) {
         __weak typeof(&*self) wself = self;
+        id<BHModuleProtocol> moduleInstance = [moduleInfo objectForKey:kModuleInfoInstanceKey];
         void ( ^ bk )();
         bk = ^(){
             __strong typeof(&*self) sself = wself;
@@ -323,7 +308,8 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 {
     //Reverse Order to unload
     for (int i = (int)self.BHModules.count - 1; i >= 0; i--) {
-        id<BHModuleProtocol> moduleInstance = [self.BHModules objectAtIndex:i];
+        NSDictionary *moduleInfo = [self.BHModules objectAtIndex:i];
+        id<BHModuleProtocol> moduleInstance = [moduleInfo objectForKey:kModuleInfoInstanceKey];
         if (moduleInstance && [moduleInstance respondsToSelector:@selector(modTearDown:)]) {
             [moduleInstance modTearDown:self.wholeContext];
         }
@@ -333,7 +319,8 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 - (void)handleModuleEvent:(NSString *)selectorStr
 {
     SEL seletor = NSSelectorFromString(selectorStr);
-    [self.BHModules enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.BHModules enumerateObjectsUsingBlock:^(NSDictionary *moduleInfo, NSUInteger idx, BOOL * _Nonnull stop) {
+        id<BHModuleProtocol> moduleInstance = [moduleInfo objectForKey:kModuleInfoInstanceKey];
         if ([moduleInstance respondsToSelector:seletor]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
