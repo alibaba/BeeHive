@@ -72,8 +72,9 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
     NSDictionary *moduleList = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
     
     NSArray *modulesArray = [moduleList objectForKey:kModuleArrayKey];
-    
-    [self.BHModules addObjectsFromArray:modulesArray];
+    for (NSDictionary *moduleInfo in modulesArray) {
+        [self.BHModules addObject:[NSMutableDictionary dictionaryWithDictionary:moduleInfo]];
+    }
     
 }
 
