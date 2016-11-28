@@ -1,4 +1,11 @@
-# BeeHive [![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![License](https://img.shields.io/cocoapods/l/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![Gitter](https://badges.gitter.im/alibaba/BeeHive.svg)](https://gitter.im/alibaba/BeeHive?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+# BeeHive
+
+[![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](https://cocoapods.org/?q=name%3Abeehive)
+[![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](https://cocoapods.org/?q=name%3Abeehive)
+[![GitHub release](https://img.shields.io/github/release/alibaba/BeeHive.svg)](https://github.com/alibaba/BeeHive/releases)  
+[![Gitter](https://badges.gitter.im/alibaba/BeeHive.svg)](https://gitter.im/alibaba/BeeHive?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![GitHub issues](https://img.shields.io/github/issues/alibaba/BeeHive.svg)](https://github.com/alibaba/BeeHive/issues)
+[![License](https://img.shields.io/badge/license-GPL%20v2-4EB1BA.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
 :book: English Documentation | [:book: 中文文档](README-CN.md)
 
@@ -31,7 +38,6 @@
     - [3.4 Inter-modal calls](#34-inter-modal-calls)
         - [3.4.1 Declare service interface](#341-declare-service-interface)
         - [3.4.2 Register Service](#342-register-service)
-            - [Declarative registration](#declarative-registration)
             - [API registration](#api-registration)
             - [`BHService.plist` registration](#bhserviceplist-registration)
         - [3.4.3 Service invocation](#343-service-invocation)
@@ -40,7 +46,8 @@
 - [4. Integration](#4-integration)
     - [`cocoapods`](#cocoapods)
 - [5. Author](#5-author)
-- [6. License](#6-license)
+- [6. weichat group ](#6-weichat-group)
+- [7. License](#7-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -310,11 +317,12 @@ pod "BeeHive", '1.0.0'
 - 达兹 dazi.dp@alibaba-inc.com
 
 # 6. weichat group 
+
 ![](https://img.alicdn.com/tps/TB13O2oOpXXXXcXaFXXXXXXXXXX-430-545.jpg)
+
 we can talk about BeeHive in weichat group.
 
 # 7. License
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
-
-
+ 
