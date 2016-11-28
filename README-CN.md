@@ -1,4 +1,11 @@
-# BeeHive [![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![License](https://img.shields.io/cocoapods/l/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](http://cocoapods.org/pods/BeeHive) [![Gitter](https://badges.gitter.im/alibaba/BeeHive.svg)](https://gitter.im/alibaba/BeeHive?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+# BeeHive
+
+[![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](https://cocoapods.org/?q=name%3Abeehive)
+[![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](https://cocoapods.org/?q=name%3Abeehive)
+[![GitHub release](https://img.shields.io/github/release/alibaba/BeeHive.svg)](https://github.com/alibaba/BeeHive/releases)  
+[![Gitter](https://badges.gitter.im/alibaba/BeeHive.svg)](https://gitter.im/alibaba/BeeHive?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![GitHub issues](https://img.shields.io/github/issues/alibaba/BeeHive.svg)](https://github.com/alibaba/BeeHive/issues)
+[![License](https://img.shields.io/badge/license-GPL%20v2-4EB1BA.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
 [:book: English Documentation](README.md) | :book: 中文文档
 
@@ -30,7 +37,6 @@
     - [3.4 模间调用](#34-%E6%A8%A1%E9%97%B4%E8%B0%83%E7%94%A8)
         - [3.4.1 定义接口](#341-%E5%AE%9A%E4%B9%89%E6%8E%A5%E5%8F%A3)
         - [3.4.2 注册`Service`](#342-%E6%B3%A8%E5%86%8Cservice)
-            - [声明式注册](#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%B3%A8%E5%86%8C)
             - [`API`注册](#api%E6%B3%A8%E5%86%8C)
             - [`BHService.plist`注册](#bhserviceplist%E6%B3%A8%E5%86%8C)
         - [3.4.3 调用`Service`](#343-%E8%B0%83%E7%94%A8service)
@@ -39,7 +45,8 @@
 - [4. 集成方式](#4-%E9%9B%86%E6%88%90%E6%96%B9%E5%BC%8F)
     - [`cocoapods`](#cocoapods)
 - [5. 作者](#5-%E4%BD%9C%E8%80%85)
-- [6. 开源许可证](#6-%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E8%AF%81)
+- [6.微信沟通群](#6%E5%BE%AE%E4%BF%A1%E6%B2%9F%E9%80%9A%E7%BE%A4)
+- [7. 开源许可证](#7-%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E8%AF%81)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -298,11 +305,11 @@ pod "BeeHive", '1.0.0'
 - 达兹 dazi.dp@alibaba-inc.com
 
 # 6.微信沟通群
+
 ![](https://img.alicdn.com/tps/TB13O2oOpXXXXcXaFXXXXXXXXXX-430-545.jpg)
+
 有BeeHive相关问题都可以在微信群中沟通
 
 # 7. 开源许可证
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
-
-
