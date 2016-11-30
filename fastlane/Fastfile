@@ -1,0 +1,5 @@
+import_from_git(
+  url: 'https://github.com/alibaba/BeeHive.git', 
+  branch: '1.0.0'
+)
+
