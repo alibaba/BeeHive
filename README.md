@@ -316,13 +316,15 @@ pod "BeeHive", '1.0.0'
 - 一渡 shijie.qinsj@alibaba-inc.com
 - 达兹 dazi.dp@alibaba-inc.com
 
-# 6. weichat group 
+# 6. WeChat Group 
 
 ![](https://img.alicdn.com/tps/TB13O2oOpXXXXcXaFXXXXXXXXXX-430-545.jpg)
 
-we can talk about BeeHive in weichat group.
+We can talk about BeeHive in WeChat group.
 
 # 7. License
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
  
+
+
