@@ -306,10 +306,10 @@ pod "BeeHive", '1.0.0'
 
 # 6.微信沟通群
 
-![](https://img.alicdn.com/tps/TB13O2oOpXXXXcXaFXXXXXXXXXX-430-545.jpg)
-
-有BeeHive相关问题都可以在微信群中沟通
+微信群已达人数上限，可以通过微信加：dolphinux ，然后邀请进入微信群。
 
 # 7. 开源许可证
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
+
+

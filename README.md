@@ -318,9 +318,7 @@ pod "BeeHive", '1.0.0'
 
 # 6. WeChat Group 
 
-![](https://img.alicdn.com/tps/TB13O2oOpXXXXcXaFXXXXXXXXXX-430-545.jpg)
-
-We can talk about BeeHive in WeChat group.
+Because the WeChat Group had reached to the max number of people , you can join us by search dolphinux in WeChat.
 
 # 7. License
 
