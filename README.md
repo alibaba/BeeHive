@@ -1,5 +1,6 @@
 # BeeHive
 
+[![Build Status](https://travis-ci.org/alibaba/BeeHive.svg?branch=master)](https://travis-ci.org/alibaba/BeeHive)
 [![Version](https://img.shields.io/cocoapods/v/BeeHive.svg?style=flat)](https://cocoapods.org/?q=name%3Abeehive)
 [![Platform](https://img.shields.io/cocoapods/p/BeeHive.svg?style=flat)](https://cocoapods.org/?q=name%3Abeehive)
 [![GitHub release](https://img.shields.io/github/release/alibaba/BeeHive.svg)](https://github.com/alibaba/BeeHive/releases)  
