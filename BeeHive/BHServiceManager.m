@@ -108,27 +108,20 @@ static const NSString *kImpl = @"impl";
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ protocol does not been registed", NSStringFromProtocol(service)] userInfo:nil];
     }
     
+    NSString *serviceName = NSStringFromProtocol(service);
+    
     Class implClass = [self serviceImplClass:service];
     
-    implInstance = [[implClass alloc] init];
-    
-    if (![implInstance respondsToSelector:@selector(singleton)]) {
+    //check singleton instance exists, and is one member of the same class
+    implInstance = [BHContext shareInstance].servicesByName[serviceName];
+    if ([implInstance isMemberOfClass:implClass]) {
         return implInstance;
     }
     
-    NSString *serviceStr = NSStringFromProtocol(service);
-    
-    if ([implInstance singleton]) {
-        id protocol = [[BHContext shareInstance].servicesByName objectForKey:serviceStr];
-        
-        if (protocol) {
-            return protocol;
-        } else {
-            [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceStr];
-        }
-        
-    } else {
-        [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceStr];
+    implInstance = [[implClass alloc] init];
+    BOOL singleton = [implClass respondsToSelector:@selector(singleton)] && [implClass singleton];
+    if (implInstance && singleton) {//replace by new service instance
+        [BHContext shareInstance].servicesByName[serviceName] = implInstance;
     }
     
     return implInstance;
