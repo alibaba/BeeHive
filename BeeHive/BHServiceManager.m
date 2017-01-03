@@ -110,7 +110,10 @@ static const NSString *kImpl = @"impl";
     
     Class implClass = [self serviceImplClass:service];
     
-    implInstance = [[implClass alloc] init];
+    if ([[implClass class] respondsToSelector:@selector(shareInstance)])
+        implInstance = [[implClass class] shareInstance];
+    else
+        implInstance = [[implClass alloc] init];
     
     if (![implInstance respondsToSelector:@selector(singleton)]) {
         return implInstance;

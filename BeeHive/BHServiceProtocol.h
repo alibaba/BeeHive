@@ -14,4 +14,6 @@
 
 -(BOOL)singleton;
 
++(id)shareInstance;
+
 @end
