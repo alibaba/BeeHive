@@ -37,7 +37,7 @@ static  NSString *kWillContinueUserActivitySelector = @"modWillContinueUserActiv
 static  NSString *kContinueUserActivitySelector = @"modContinueUserActivity:";
 static  NSString *kDidUpdateContinueUserActivitySelector = @"modDidUpdateContinueUserActivity:";
 static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUserActivity:";
-
+static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 
 
@@ -213,6 +213,8 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
             break;
             
         default:
+            [BHContext shareInstance].customEvent = eventType;
+            [self handleModuleEvent:kAppCustomSelector];
             break;
     }
 }
