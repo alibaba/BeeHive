@@ -70,5 +70,5 @@
 
 - (void)modDidUpdateContinueUserActivity:(BHContext *)context;
 
-
+- (void)modDidCustomEvent:(BHContext *)context;
 @end
