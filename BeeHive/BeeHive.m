@@ -76,7 +76,7 @@
 
 -(void)loadStaticServices
 {
-    [BHServiceManager sharedManager].enableException = self.enableExpection;
+    [BHServiceManager sharedManager].enableException = self.enableException;
     
     [[BHServiceManager sharedManager] setWholeContext:self.context];
     

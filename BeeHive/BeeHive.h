@@ -18,7 +18,7 @@
 //save application global context
 @property(nonatomic, strong) BHContext *context;
 
-@property (nonatomic, assign) BOOL enableExpection;
+@property (nonatomic, assign) BOOL enableException;
 
 + (instancetype)shareInstance;
 
