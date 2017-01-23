@@ -135,7 +135,7 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
 }
 
 
-- (void)tiggerEvent:(BHModuleEventType)eventType
+- (void)triggerEvent:(BHModuleEventType)eventType
 {
     switch (eventType) {
         case BHMSetupEvent:
