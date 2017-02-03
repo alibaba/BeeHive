@@ -309,7 +309,7 @@ Initial setup application project information , and share information across app
 ## `cocoapods`
 
 ```sh
-pod "BeeHive", '1.0.0'
+pod "BeeHive", '1.1.1'
 ```
 
 # 5. Author
