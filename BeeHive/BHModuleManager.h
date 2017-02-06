@@ -38,7 +38,8 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
     BHMWillContinueUserActivityEvent,
     BHMContinueUserActivityEvent,
     BHMDidFailToContinueUserActivityEvent,
-    BHMDidUpdateUserActivityEvent
+    BHMDidUpdateUserActivityEvent,
+    BHMDidCustomEvent = 1000
     
 };
 

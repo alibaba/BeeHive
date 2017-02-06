@@ -85,5 +85,10 @@
     [[BHServiceManager sharedManager] registerAnnotationServices];
     
 }
+- (void)tiggerCustomEvent:(NSInteger)eventType{
+    if(eventType<1000)
+    return;
+    [[BHModuleManager sharedManager] tiggerEvent:eventType];
+}
 
 @end
