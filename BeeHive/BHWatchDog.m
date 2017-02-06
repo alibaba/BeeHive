@@ -74,7 +74,7 @@ typedef void (^watchdogFiredCallBack)();
             //避免后台切换导致进入断言
             NSAssert([UIApplication sharedApplication].applicationState == UIApplicationStateBackground, message);
         } else {
-            NSLog(message);
+            NSLog(@"%@", message);
         }
     }];
 
