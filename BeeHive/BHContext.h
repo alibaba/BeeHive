@@ -30,7 +30,8 @@ typedef enum
 
 //application appkey
 @property(nonatomic, strong) NSString *appkey;
-
+//customEvent>=1000
+@property(nonatomic, assign) NSInteger customEvent;
 
 @property(nonatomic, strong) UIApplication *application;
 
