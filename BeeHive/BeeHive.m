@@ -44,7 +44,7 @@
 
 - (void)registerService:(Protocol *)proto service:(Class) serviceClass
 {
-
+    
     [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
 }
 
@@ -69,7 +69,7 @@
     [[BHModuleManager sharedManager] loadLocalModules];
     
     [[BHModuleManager sharedManager] registedAnnotationModules];
-
+    
     [[BHModuleManager sharedManager] registedAllModules];
     
 }
@@ -85,10 +85,10 @@
     [[BHServiceManager sharedManager] registerAnnotationServices];
     
 }
-- (void)tiggerCustomEvent:(NSInteger)eventType{
+- (void)triggerCustomEvent:(NSInteger)eventType{
     if(eventType<1000)
-    return;
-    [[BHModuleManager sharedManager] tiggerEvent:eventType];
+        return;
+    [[BHModuleManager sharedManager] triggerEvent:eventType];
 }
 
 @end
