@@ -7,6 +7,7 @@
 //
 
 #import "BHAnnotation.h"
+#import "BHCommon.h"
 #include <mach-o/getsect.h>
 #include <mach-o/loader.h>
 #include <mach-o/dyld.h>
@@ -37,7 +38,7 @@ static NSArray<NSString *>* BHReadConfiguration(char *section)
         NSString *str = [NSString stringWithUTF8String:string];
         if(!str)continue;
         
-        NSLog(@"config = %@", str);
+        BHLog(@"config = %@", str);
         if(str) [configs addObject:str];
     }
     

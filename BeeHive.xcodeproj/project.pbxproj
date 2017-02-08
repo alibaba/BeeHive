@@ -37,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E496C5F1E4B277D0012851F /* BHCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BHCommon.h; sourceTree = "<group>"; };
 		D85037CF1B9C6D8400864DF0 /* BeeHive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = BeeHive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D85037D21B9C6D8400864DF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		D85037D61B9C6D8400864DF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 				E232FEA91CF311F800CBFA52 /* BHWatchDog.m */,
 				E22E60111BEB923700C195E4 /* BHModuleProtocol.h */,
 				E22E60221BEB924200C195E4 /* BHServiceProtocol.h */,
+				0E496C5F1E4B277D0012851F /* BHCommon.h */,
 				D85037D51B9C6D8400864DF0 /* Supporting Files */,
 			);
 			path = BeeHive;
