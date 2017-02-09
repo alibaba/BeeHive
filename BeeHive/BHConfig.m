@@ -7,6 +7,7 @@
  */
 
 #import "BHConfig.h"
+#import "BHCommon.h"
 
 @interface BHConfig()
 
@@ -19,19 +20,18 @@
 static BHConfig *_BHConfigInstance;
 
 
-+(instancetype) shareInstance
++ (instancetype)shareInstance
 {
     static dispatch_once_t p;
     
     dispatch_once(&p, ^{
         _BHConfigInstance = [[[self class] alloc] init];
     });
-    
     return _BHConfigInstance;
 }
 
 
-+(NSString *)stringValue:(NSString *)key
++ (NSString *)stringValue:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return nil;
@@ -40,7 +40,7 @@ static BHConfig *_BHConfigInstance;
     return (NSString *)[[BHConfig shareInstance].config objectForKey:key];
 }
 
-+(NSDictionary *)dictionaryValue:(NSString *)key
++ (NSDictionary *)dictionaryValue:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return nil;
@@ -53,7 +53,7 @@ static BHConfig *_BHConfigInstance;
     return (NSDictionary *)[[BHConfig shareInstance].config objectForKey:key];
 }
 
-+(NSArray *)arrayValue:(NSString *)key
++ (NSArray *)arrayValue:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return nil;
@@ -66,7 +66,7 @@ static BHConfig *_BHConfigInstance;
     return (NSArray *)[[BHConfig shareInstance].config objectForKey:key];
 }
 
-+(NSInteger)integerValue:(NSString *)key
++ (NSInteger)integerValue:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return 0;
@@ -75,7 +75,7 @@ static BHConfig *_BHConfigInstance;
     return [[[BHConfig shareInstance].config objectForKey:key] integerValue];
 }
 
-+(float)floatValue:(NSString *)key
++ (float)floatValue:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return 0.0;
@@ -84,7 +84,7 @@ static BHConfig *_BHConfigInstance;
     return [(NSNumber *)[[BHConfig shareInstance].config objectForKey:key] floatValue];
 }
 
-+(BOOL)boolValue:(NSString *)key
++ (BOOL)boolValue:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return NO;
@@ -94,7 +94,7 @@ static BHConfig *_BHConfigInstance;
 }
 
 
-+(id)get:(NSString *)key
++ (id)get:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         @throw [NSException exceptionWithName:@"ConfigNotInitialize" reason:@"config not initialize" userInfo:nil];
@@ -104,13 +104,13 @@ static BHConfig *_BHConfigInstance;
     
     id v = [[BHConfig shareInstance].config objectForKey:key];
     if (!v) {
-        NSLog(@"InvaildKeyValue %@ is nil", key);
+        BHLog(@"InvaildKeyValue %@ is nil", key);
     }
     
     return v;
 }
 
-+(BOOL)has:(NSString *)key
++ (BOOL)has:(NSString *)key
 {
     if (![BHConfig shareInstance].config) {
         return NO;
@@ -123,7 +123,7 @@ static BHConfig *_BHConfigInstance;
     return YES;
 }
 
-+(void)set:(NSString *)key value:(id)value
++ (void)set:(NSString *)key value:(id)value
 {
     if (![BHConfig shareInstance].config) {
         [BHConfig shareInstance].config = [[NSMutableDictionary alloc] initWithCapacity:10];
@@ -133,18 +133,18 @@ static BHConfig *_BHConfigInstance;
 }
 
 
-+(void)set:(NSString *)key boolValue:(BOOL)value
++ (void)set:(NSString *)key boolValue:(BOOL)value
 {
     [self set:key value:[NSNumber numberWithBool:value]];
 }
 
-+(void)set:(NSString *)key integerValue:(NSInteger)value
++ (void)set:(NSString *)key integerValue:(NSInteger)value
 {
     [self set:key value:[NSNumber numberWithInteger:value]];
 }
 
 
-+(void) add:(NSDictionary *)parameters
++ (void) add:(NSDictionary *)parameters
 {
     if (![BHConfig shareInstance].config) {
         [BHConfig shareInstance].config = [[NSMutableDictionary alloc] initWithCapacity:10];
@@ -153,13 +153,12 @@ static BHConfig *_BHConfigInstance;
     [[BHConfig shareInstance].config addEntriesFromDictionary:parameters];
 }
 
-
-+(NSDictionary *) getAll
++ (NSDictionary *) getAll
 {
     return [BHConfig shareInstance].config;
 }
 
-+(void)clear
++ (void)clear
 {
     if ([BHConfig shareInstance].config) {
         [[BHConfig shareInstance].config removeAllObjects];

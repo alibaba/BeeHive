@@ -7,6 +7,7 @@
  */
 
 #import "BHWatchDog.h"
+#import "BHCommon.h"
 #import <UIKit/UIKit.h>
 
 typedef void (^handler)();
@@ -74,7 +75,7 @@ typedef void (^watchdogFiredCallBack)();
             //避免后台切换导致进入断言
             NSAssert([UIApplication sharedApplication].applicationState == UIApplicationStateBackground, message);
         } else {
-            NSLog(message);
+            BHLog(@"%@", message);
         }
     }];
 

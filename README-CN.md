@@ -297,7 +297,7 @@ id< HomeServiceProtocol > homeVc = [[BeeHive shareInstance] createService:@proto
 ## `cocoapods`
 
 ```sh
-pod "BeeHive", '1.0.0'
+pod "BeeHive", '1.1.1'
 ```
 
 # 5. 作者

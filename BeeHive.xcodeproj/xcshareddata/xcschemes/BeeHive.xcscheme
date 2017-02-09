@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E20133841E489237000B37DC"
+               BuildableName = "BeeHiveTests.xctest"
+               BlueprintName = "BeeHiveTests"
+               ReferencedContainer = "container:BeeHive.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D85037CE1B9C6D8400864DF0"
+            BuildableName = "BeeHive.framework"
+            BlueprintName = "BeeHive"
+            ReferencedContainer = "container:BeeHive.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

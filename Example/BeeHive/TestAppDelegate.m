@@ -1,4 +1,5 @@
 
+
 //  TestAppDelegate.m
 //  BeeHive
 //
@@ -29,7 +30,7 @@
     [BHContext shareInstance].moduleConfigName = @"BeeHive.bundle/BeeHive";//可选，默认为BeeHive.bundle/BeeHive.plist
     [BHContext shareInstance].serviceConfigName = @"BeeHive.bundle/BHService";
     
-    [BeeHive shareInstance].enableExpection = YES;
+    [BeeHive shareInstance].enableException = YES;
     [[BeeHive shareInstance] setContext:[BHContext shareInstance]];
     [[BHTimeProfiler sharedTimeProfiler] recordEventTime:@"BeeHive::super start launch"];
 

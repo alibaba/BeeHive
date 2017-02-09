@@ -6,10 +6,14 @@
  * For the full copyright and license information,please view the LICENSE file in the root directory of this source tree.
  */
 
-#import <Foundation/Foundation.h>
+#ifndef BHCommon_h
+#define BHCommon_h
 
-@interface BHWatchDog : NSObject
+// Debug Logging
+#ifdef DEBUG
+#define BHLog(x, ...) NSLog(x, ## __VA_ARGS__);
+#else
+#define BHLog(x, ...)
+#endif
 
-- (instancetype)initWithThreshold:(double)threshold strictMode:(BOOL)strictMode;
-
-@end
+#endif /* BHCommon_h */

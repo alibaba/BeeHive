@@ -44,7 +44,6 @@
 
 - (void)registerService:(Protocol *)proto service:(Class) serviceClass
 {
-
     [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
 }
 
@@ -76,7 +75,7 @@
 
 -(void)loadStaticServices
 {
-    [BHServiceManager sharedManager].enableException = self.enableExpection;
+    [BHServiceManager sharedManager].enableException = self.enableException;
     
     [[BHServiceManager sharedManager] setWholeContext:self.context];
     
@@ -84,6 +83,11 @@
     
     [[BHServiceManager sharedManager] registerAnnotationServices];
     
+}
+- (void)tiggerCustomEvent:(NSInteger)eventType{
+    if(eventType<1000)
+    return;
+    [[BHModuleManager sharedManager] triggerEvent:eventType];
 }
 
 @end

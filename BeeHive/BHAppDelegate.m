@@ -15,7 +15,7 @@
 
 @interface BHAppDelegate ()
 
-@property (nonatomic, strong) BHTimeProfiler *timeProdiler;
+@property (nonatomic, strong) BHTimeProfiler *timeProfiler;
 
 @end
 
@@ -27,19 +27,19 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #ifdef DEBUG
-    self.timeProdiler = [BHTimeProfiler sharedTimeProfiler];
+    self.timeProfiler = [BHTimeProfiler sharedTimeProfiler];
 #endif
     
-    [[BHModuleManager sharedManager] tiggerEvent:BHMSetupEvent];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMInitEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMSetupEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMInitEvent];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[BHModuleManager sharedManager] tiggerEvent:BHMSplashEvent];
+        [[BHModuleManager sharedManager] triggerEvent:BHMSplashEvent];
     });
     
 #ifdef DEBUG
-    [self.timeProdiler printOutTimeProfileResult];
-    [self.timeProdiler saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
+    [self.timeProfiler printOutTimeProfileResult];
+    [self.timeProfiler saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
 #endif
     
     return YES;
@@ -50,43 +50,42 @@
 
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
-  
     [[BeeHive shareInstance].context.touchShortcutItem setShortcutItem: shortcutItem];
     [[BeeHive shareInstance].context.touchShortcutItem setScompletionHandler: completionHandler];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMQuickActionEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMQuickActionEvent];
 }
 #endif
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    [[BHModuleManager sharedManager] tiggerEvent:BHMWillResignActiveEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMWillResignActiveEvent];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidEnterBackgroundEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidEnterBackgroundEvent];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[BHModuleManager sharedManager] tiggerEvent:BHMWillEnterForegroundEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMWillEnterForegroundEvent];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidBecomeActiveEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidBecomeActiveEvent];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [[BHModuleManager sharedManager] tiggerEvent:BHMWillTerminateEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMWillTerminateEvent];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     [[BeeHive shareInstance].context.openURLItem setOpenURL:url];
     [[BeeHive shareInstance].context.openURLItem setSourceApplication:sourceApplication];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMOpenURLEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMOpenURLEvent];
     return YES;
 }
 
@@ -96,7 +95,7 @@
   
     [[BeeHive shareInstance].context.openURLItem setOpenURL:url];
     [[BeeHive shareInstance].context.openURLItem setOptions:options];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMOpenURLEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMOpenURLEvent];
     return YES;
 }
 #endif
@@ -104,38 +103,38 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidReceiveMemoryWarningEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveMemoryWarningEvent];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     [[BeeHive shareInstance].context.notificationsItem setNotificationsError:error];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidFailToRegisterForRemoteNotificationsEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidFailToRegisterForRemoteNotificationsEvent];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [[BeeHive shareInstance].context.notificationsItem setDeviceToken: deviceToken];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidRegisterForRemoteNotificationsEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidRegisterForRemoteNotificationsEvent];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [[BeeHive shareInstance].context.notificationsItem setUserInfo: userInfo];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidReceiveRemoteNotificationEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveRemoteNotificationEvent];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [[BeeHive shareInstance].context.notificationsItem setUserInfo: userInfo];
     [[BeeHive shareInstance].context.notificationsItem setNotificationResultHander: completionHandler];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidReceiveRemoteNotificationEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveRemoteNotificationEvent];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     [[BeeHive shareInstance].context.notificationsItem setLocalNotification: notification];
-    [[BHModuleManager sharedManager] tiggerEvent:BHMDidReceiveLocalNotificationEvent];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveLocalNotificationEvent];
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > 80000
@@ -143,7 +142,7 @@
 {
     if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivity: userActivity];
-        [[BHModuleManager sharedManager] tiggerEvent:BHMDidUpdateUserActivityEvent];
+        [[BHModuleManager sharedManager] triggerEvent:BHMDidUpdateUserActivityEvent];
     }
 }
 
@@ -152,7 +151,7 @@
     if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivityType: userActivityType];
         [[BeeHive shareInstance].context.userActivityItem setUserActivityError: error];
-        [[BHModuleManager sharedManager] tiggerEvent:BHMDidFailToContinueUserActivityEvent];
+        [[BHModuleManager sharedManager] triggerEvent:BHMDidFailToContinueUserActivityEvent];
     }
 }
 
@@ -161,7 +160,7 @@
     if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivity: userActivity];
         [[BeeHive shareInstance].context.userActivityItem setRestorationHandler: restorationHandler];
-        [[BHModuleManager sharedManager] tiggerEvent:BHMContinueUserActivityEvent];
+        [[BHModuleManager sharedManager] triggerEvent:BHMContinueUserActivityEvent];
     }
     return YES;
 }
@@ -170,7 +169,7 @@
 {
     if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivityType: userActivityType];
-        [[BHModuleManager sharedManager] tiggerEvent:BHMWillContinueUserActivityEvent];
+        [[BHModuleManager sharedManager] triggerEvent:BHMWillContinueUserActivityEvent];
     }
     return YES;
 }
