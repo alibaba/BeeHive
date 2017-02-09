@@ -8,6 +8,13 @@
 
 #import "BHContext.h"
 
+@interface BHContext()
+
+@property(nonatomic, strong) NSMutableDictionary *modulesByName;
+
+@property(nonatomic, strong) NSMutableDictionary *servicesByName;
+
+@end
 
 @implementation BHContext
 
