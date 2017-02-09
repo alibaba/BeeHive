@@ -8,16 +8,42 @@
 
 #import "BHContext.h"
 
-
 @interface BHContext()
 
+@property(nonatomic, strong) NSMutableDictionary *modulesByName;
 
+@property(nonatomic, strong) NSMutableDictionary *servicesByName;
 
 @end
 
 @implementation BHContext
 
--(instancetype)init
++ (instancetype)shareInstance
+{
+    static dispatch_once_t p;
+    static id BHInstance = nil;
+    
+    dispatch_once(&p, ^{
+        BHInstance = [[[self class] alloc] init];
+        if ([BHInstance isKindOfClass:[BHContext class]]) {
+            ((BHContext *) BHInstance).config = [BHConfig shareInstance];
+        }
+    });
+    
+    return BHInstance;
+}
+
+- (void)addServiceWithImplInstance:(id)implInstance serviceName:(NSString *)serviceName
+{
+    [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceName];
+}
+
+- (id)getServiceInstanceFromServiceName:(NSString *)serviceName
+{
+    return [[BHContext shareInstance].servicesByName objectForKey:serviceName];
+}
+
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -37,21 +63,5 @@
 
     return self;
 }
-
-+(instancetype) shareInstance
-{
-    static dispatch_once_t p;
-    static id BHInstance = nil;
-    
-    dispatch_once(&p, ^{
-        BHInstance = [[[self class] alloc] init];
-        if ([BHInstance isKindOfClass:[BHContext class]]) {
-            ((BHContext *) BHInstance).config = [BHConfig shareInstance];
-        }
-    });
-    
-    return BHInstance;
-}
-
 
 @end

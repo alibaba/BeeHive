@@ -15,8 +15,6 @@
 
 @interface BHAppDelegate ()
 
-@property (nonatomic, strong) BHTimeProfiler *timeProfiler;
-
 @end
 
 @implementation BHAppDelegate
@@ -26,9 +24,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#ifdef DEBUG
-    self.timeProfiler = [BHTimeProfiler sharedTimeProfiler];
-#endif
     
     [[BHModuleManager sharedManager] triggerEvent:BHMSetupEvent];
     [[BHModuleManager sharedManager] triggerEvent:BHMInitEvent];
@@ -38,8 +33,8 @@
     });
     
 #ifdef DEBUG
-    [self.timeProfiler printOutTimeProfileResult];
-    [self.timeProfiler saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
+    [[BHTimeProfiler sharedTimeProfiler] printOutTimeProfileResult];
+    [[BHTimeProfiler sharedTimeProfiler] saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
 #endif
     
     return YES;
