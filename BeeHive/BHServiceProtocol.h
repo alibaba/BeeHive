@@ -12,6 +12,8 @@
 
 @optional
 
--(BOOL)singleton;
+- (BOOL)singleton;
+
++ (id)shareInstance;
 
 @end
