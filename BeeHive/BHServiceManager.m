@@ -34,7 +34,7 @@ static const NSString *kImpl = @"impl";
 {
     NSString *serviceConfigName = [BHContext shareInstance].serviceConfigName;
     
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:serviceConfigName  ofType:@"plist"];
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:serviceConfigName ofType:@"plist"];
     if (!plistPath) {
         return;
     }
