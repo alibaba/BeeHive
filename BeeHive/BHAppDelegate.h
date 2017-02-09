@@ -21,7 +21,7 @@ typedef void (^notificationResultHandler)(UIBackgroundFetchResult);
 @property (nonatomic, strong) NSError *notificationsError;
 @property (nonatomic, strong) NSData *deviceToken;
 @property (nonatomic, strong) NSDictionary *userInfo;
-@property (nonatomic, assign) notificationResultHandler notifciationResultHander;
+@property (nonatomic, assign) notificationResultHandler notificationResultHander;
 @property (nonatomic, strong) UILocalNotification *localNotification;
 
 @end
