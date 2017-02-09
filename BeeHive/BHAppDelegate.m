@@ -127,7 +127,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [[BeeHive shareInstance].context.notificationsItem setUserInfo: userInfo];
-    [[BeeHive shareInstance].context.notificationsItem setNotifciationResultHander: completionHandler];
+    [[BeeHive shareInstance].context.notificationsItem setNotificationResultHander: completionHandler];
     [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveRemoteNotificationEvent];
 }
 
