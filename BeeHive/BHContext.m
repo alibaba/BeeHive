@@ -26,8 +26,17 @@
     return BHInstance;
 }
 
+- (void)addServiceWithImplInstance:(id)implInstance serviceName:(NSString *)serviceName
+{
+    [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceName];
+}
 
--(instancetype)init
+- (id)getServiceInstanceFromServiceName:(NSString *)serviceName
+{
+    return [[BHContext shareInstance].servicesByName objectForKey:serviceName];
+}
+
+- (instancetype)init
 {
     self = [super init];
     if (self) {

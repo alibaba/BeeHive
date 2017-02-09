@@ -114,16 +114,16 @@ static const NSString *kImpl = @"impl";
     NSString *serviceStr = NSStringFromProtocol(service);
     
     if ([implInstance singleton]) {
-        id protocol = [[BHContext shareInstance].servicesByName objectForKey:serviceStr];
+        id protocol = [[BHContext shareInstance] getServiceInstanceFromServiceName:serviceStr];
         
         if (protocol) {
             return protocol;
         } else {
-            [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceStr];
+            [[BHContext shareInstance] addServiceWithImplInstance:implInstance serviceName:serviceStr];
         }
         
     } else {
-        [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceStr];
+        [[BHContext shareInstance] addServiceWithImplInstance:implInstance serviceName:serviceStr];
     }
     
     return implInstance;
