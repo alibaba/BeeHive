@@ -50,7 +50,6 @@
 
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
-  
     [[BeeHive shareInstance].context.touchShortcutItem setShortcutItem: shortcutItem];
     [[BeeHive shareInstance].context.touchShortcutItem setScompletionHandler: completionHandler];
     [[BHModuleManager sharedManager] triggerEvent:BHMQuickActionEvent];
@@ -128,7 +127,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [[BeeHive shareInstance].context.notificationsItem setUserInfo: userInfo];
-    [[BeeHive shareInstance].context.notificationsItem setNotifciationResultHander: completionHandler];
+    [[BeeHive shareInstance].context.notificationsItem setNotificationResultHander: completionHandler];
     [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveRemoteNotificationEvent];
 }
 
