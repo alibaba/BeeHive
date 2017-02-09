@@ -30,17 +30,9 @@ static const NSString *kImpl = @"impl";
     return sharedManager;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
-
 - (void)registerLocalServices
 {
-    NSString *serviceConfigName = self.wholeContext.serviceConfigName;
+    NSString *serviceConfigName = [BHContext shareInstance].serviceConfigName;
     
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:serviceConfigName  ofType:@"plist"];
     if (!plistPath) {
@@ -181,7 +173,7 @@ static const NSString *kImpl = @"impl";
 - (NSArray *)servicesArray
 {
     [self.lock lock];
-    NSArray *array = [self.allServices mutableCopy];
+    NSArray *array = [self.allServices copy];
     [self.lock unlock];
     return array;
 }

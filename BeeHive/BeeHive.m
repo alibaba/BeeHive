@@ -68,8 +68,6 @@
 {
     [BHServiceManager sharedManager].enableException = self.enableException;
     
-    [[BHServiceManager sharedManager] setWholeContext:self.context];
-    
     [[BHServiceManager sharedManager] registerLocalServices];
     
     [[BHServiceManager sharedManager] registerAnnotationServices];
