@@ -16,7 +16,6 @@
 -(BOOL)async { return [[NSString stringWithUTF8String:#isAsync] boolValue];}
 
 
-
 @protocol BHModuleProtocol <NSObject>
 
 
