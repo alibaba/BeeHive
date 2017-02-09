@@ -28,6 +28,7 @@
 		E232FEAA1CF311F800CBFA52 /* BHWatchDog.h in Headers */ = {isa = PBXBuildFile; fileRef = E232FEA81CF311F800CBFA52 /* BHWatchDog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E232FEAB1CF311F800CBFA52 /* BHWatchDog.m in Sources */ = {isa = PBXBuildFile; fileRef = E232FEA91CF311F800CBFA52 /* BHWatchDog.m */; };
 		E2429AC61BF089D6003336D1 /* BeeHive.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E2429AC51BF089D6003336D1 /* BeeHive.bundle */; };
+		E278B1151E4B150300ED30FF /* BeeHive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85037CF1B9C6D8400864DF0 /* BeeHive.framework */; };
 		E286CAA91CB4B271004E6640 /* BHModuleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E286CAA71CB4B271004E6640 /* BHModuleManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E286CAAA1CB4B271004E6640 /* BHModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E286CAA81CB4B271004E6640 /* BHModuleManager.m */; };
 		E286CAAD1CB4B27A004E6640 /* BHServiceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E286CAAB1CB4B27A004E6640 /* BHServiceManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E278B1151E4B150300ED30FF /* BeeHive.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -538,6 +540,7 @@
 				E201338E1E489237000B37DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

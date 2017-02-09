@@ -44,7 +44,6 @@
 
 - (void)registerService:(Protocol *)proto service:(Class) serviceClass
 {
-
     [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
 }
 
