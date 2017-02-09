@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
-
 @interface BHWatchDog : NSObject
 
 - (instancetype)initWithThreshold:(double)threshold strictMode:(BOOL)strictMode;
