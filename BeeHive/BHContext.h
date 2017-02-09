@@ -61,4 +61,8 @@ typedef enum
 
 + (instancetype)shareInstance;
 
+- (void)addServiceWithImplInstance:(id)implInstance serviceName:(NSString *)serviceName;
+
+- (id)getServiceInstanceFromServiceName:(NSString *)serviceName;
+
 @end
