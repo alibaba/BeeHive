@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class BHContext;
-
 typedef NS_ENUM(NSUInteger, BHModuleLevel)
 {
     BHModuleBasic  = 0,
@@ -47,11 +45,6 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 @class BHModule;
 
 @interface BHModuleManager : NSObject
-
-@property (nonatomic, strong) NSString *modulesConfigFilename;
-
-@property (nonatomic, strong) BHContext           *wholeContext;
-
 
 + (instancetype)sharedManager;
 

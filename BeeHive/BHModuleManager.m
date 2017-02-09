@@ -47,7 +47,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 @property(nonatomic, strong)  NSMutableArray      *BHModules;
 
-
 @end
 
 @implementation BHModuleManager
@@ -59,7 +58,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     static id sharedManager = nil;
     static dispatch_once_t onceToken = 0;
     dispatch_once(&onceToken, ^{
-        sharedManager = [[self alloc] init];
+        sharedManager = [[BHModuleManager alloc] init];
     });
     return sharedManager;
 }
@@ -67,7 +66,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 - (void)loadLocalModules
 {
     
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:self.modulesConfigFilename ofType:@"plist"];
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:[BHContext shareInstance].moduleConfigName ofType:@"plist"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
         return;
     }
@@ -285,17 +284,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 #pragma mark - property setter or getter
 
-- (void)setModulesConfigFilename:(NSString *)modulesConfigFilename
-{
-    _modulesConfigFilename = modulesConfigFilename;
-}
-
-- (void)setWholeContext:(BHContext *)wholeContext
-{
-    _wholeContext = wholeContext;
-    self.modulesConfigFilename = _wholeContext.moduleConfigName;
-}
-
 - (NSMutableArray *)BHModules
 {
     if (!_BHModules) {
@@ -316,7 +304,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
             __strong typeof(&*self) sself = wself;
             if (sself) {
                 if ([moduleInstance respondsToSelector:@selector(modInit:)]) {
-                    [moduleInstance modInit:sself.wholeContext];
+                    [moduleInstance modInit:[BHContext shareInstance]];
                 }
             }
         };
@@ -346,7 +334,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     for (int i = (int)self.BHModules.count - 1; i >= 0; i--) {
         id<BHModuleProtocol> moduleInstance = [self.BHModules objectAtIndex:i];
         if (moduleInstance && [moduleInstance respondsToSelector:@selector(modTearDown:)]) {
-            [moduleInstance modTearDown:self.wholeContext];
+            [moduleInstance modTearDown:[BHContext shareInstance]];
         }
     }
 }
@@ -358,7 +346,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         if ([moduleInstance respondsToSelector:seletor]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            [moduleInstance performSelector:seletor withObject:self.wholeContext];
+            [moduleInstance performSelector:seletor withObject:[BHContext shareInstance]];
 #pragma clang diagnostic pop
 
         [[BHTimeProfiler sharedTimeProfiler] recordEventTime:[NSString stringWithFormat:@"%@ --- %@", [moduleInstance class], NSStringFromSelector(seletor)]];

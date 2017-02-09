@@ -59,7 +59,6 @@ typedef enum
 //user Activity Model
 @property (nonatomic, strong) BHUserActivityItem *userActivityItem;
 
-+(instancetype) shareInstance;
-
++ (instancetype)shareInstance;
 
 @end

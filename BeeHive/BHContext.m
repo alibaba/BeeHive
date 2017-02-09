@@ -9,13 +9,23 @@
 #import "BHContext.h"
 
 
-@interface BHContext()
-
-
-
-@end
-
 @implementation BHContext
+
++ (instancetype)shareInstance
+{
+    static dispatch_once_t p;
+    static id BHInstance = nil;
+    
+    dispatch_once(&p, ^{
+        BHInstance = [[[self class] alloc] init];
+        if ([BHInstance isKindOfClass:[BHContext class]]) {
+            ((BHContext *) BHInstance).config = [BHConfig shareInstance];
+        }
+    });
+    
+    return BHInstance;
+}
+
 
 -(instancetype)init
 {
@@ -37,21 +47,5 @@
 
     return self;
 }
-
-+(instancetype) shareInstance
-{
-    static dispatch_once_t p;
-    static id BHInstance = nil;
-    
-    dispatch_once(&p, ^{
-        BHInstance = [[[self class] alloc] init];
-        if ([BHInstance isKindOfClass:[BHContext class]]) {
-            ((BHContext *) BHInstance).config = [BHConfig shareInstance];
-        }
-    });
-    
-    return BHInstance;
-}
-
 
 @end

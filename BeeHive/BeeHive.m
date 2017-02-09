@@ -8,14 +8,6 @@
 
 #import "BeeHive.h"
 
-
-//BootLoader
-
-@interface BeeHive()
-
-@end
-
-
 @implementation BeeHive
 
 #pragma mark - public
@@ -63,7 +55,6 @@
 
 - (void)loadStaticModules
 {
-    [[BHModuleManager sharedManager] setWholeContext:self.context];
     
     [[BHModuleManager sharedManager] loadLocalModules];
     
@@ -84,9 +75,13 @@
     [[BHServiceManager sharedManager] registerAnnotationServices];
     
 }
-- (void)tiggerCustomEvent:(NSInteger)eventType{
-    if(eventType<1000)
-    return;
+
+- (void)tiggerCustomEvent:(NSInteger)eventType
+{
+    if(eventType < 1000) {
+        return;
+    }
+    
     [[BHModuleManager sharedManager] triggerEvent:eventType];
 }
 
