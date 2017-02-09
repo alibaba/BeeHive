@@ -41,10 +41,6 @@ typedef enum
 
 @property(nonatomic, strong) NSString *serviceConfigName;
 
-@property(nonatomic, strong) NSMutableDictionary *modulesByName;
-
-@property(nonatomic, strong) NSMutableDictionary *servicesByName;
-
 //3D-Touch model
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > 80400
 @property (nonatomic, strong) BHShortcutItem *touchShortcutItem;
@@ -59,7 +55,10 @@ typedef enum
 //user Activity Model
 @property (nonatomic, strong) BHUserActivityItem *userActivityItem;
 
-+(instancetype) shareInstance;
++ (instancetype)shareInstance;
 
+- (void)addServiceWithImplInstance:(id)implInstance serviceName:(NSString *)serviceName;
+
+- (id)getServiceInstanceFromServiceName:(NSString *)serviceName;
 
 @end

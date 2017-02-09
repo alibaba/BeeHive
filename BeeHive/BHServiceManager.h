@@ -12,10 +12,7 @@
 
 @interface BHServiceManager : NSObject
 
-@property (nonatomic, strong) BHContext           *wholeContext;
-
 @property (nonatomic, assign) BOOL  enableException;
-
 
 + (instancetype)sharedManager;
 
