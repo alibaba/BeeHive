@@ -7,6 +7,7 @@
  */
 
 #import "BHConfig.h"
+#import "BHCommon.h"
 
 @interface BHConfig()
 
@@ -103,7 +104,7 @@ static BHConfig *_BHConfigInstance;
     
     id v = [[BHConfig shareInstance].config objectForKey:key];
     if (!v) {
-        NSLog(@"InvaildKeyValue %@ is nil", key);
+        BHLog(@"InvaildKeyValue %@ is nil", key);
     }
     
     return v;
