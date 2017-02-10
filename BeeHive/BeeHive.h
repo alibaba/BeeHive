@@ -15,19 +15,20 @@
 
 @interface BeeHive : NSObject
 
-//save application global context
-@property(nonatomic, strong) BHContext *context;
+@property (nonatomic, strong) BHContext *context;
 
 @property (nonatomic, assign) BOOL enableException;
 
 + (instancetype)shareInstance;
 
-+ (void)registerDynamicModule:(Class) moduleClass;
++ (void)registerDynamicModule:(Class)moduleClass;
 
 - (id)createService:(Protocol *)proto;
 
-//Registration is recommended to use a static way
--(void)registerService:(Protocol *)proto service:(Class) serviceClass;
+- (void)registerService:(Protocol *)proto service:(Class)serviceClass;
+
+- (void)triggerEvent:(BHModuleEventType)eventType;
 
 - (void)tiggerCustomEvent:(NSInteger)eventType;
+
 @end

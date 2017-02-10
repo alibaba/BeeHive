@@ -53,16 +53,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 #pragma mark - public
 
-+ (instancetype)sharedManager
-{
-    static id sharedManager = nil;
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        sharedManager = [[BHModuleManager alloc] init];
-    });
-    return sharedManager;
-}
-
 - (void)loadLocalModules
 {
     
@@ -82,7 +72,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 - (void)registerDynamicModule:(Class)moduleClass
 {
     [self addModuleFromObject:moduleClass];
- 
 }
 
 - (void)registedAllModules

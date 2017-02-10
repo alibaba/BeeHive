@@ -8,6 +8,13 @@
 
 #import "BeeHive.h"
 
+@interface BeeHive()
+
+@property (nonatomic, strong) BHModuleManager *moduleManager;
+@property (nonatomic, strong) BHServiceManager *serviceManager;
+
+@end
+
 @implementation BeeHive
 
 #pragma mark - public
@@ -26,7 +33,10 @@
 
 + (void)registerDynamicModule:(Class)moduleClass
 {
-    [[BHModuleManager sharedManager] registerDynamicModule:moduleClass];
+    if (![BeeHive shareInstance].context) {
+        return;
+    }
+    [[BeeHive shareInstance] registerDynamicModule:moduleClass];
 }
 
 - (id)createService:(Protocol *)proto;
@@ -34,9 +44,23 @@
     return [[BHServiceManager sharedManager] createService:proto];
 }
 
-- (void)registerService:(Protocol *)proto service:(Class) serviceClass
+- (void)registerService:(Protocol *)proto service:(Class)serviceClass
 {
     [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
+}
+
+- (void)triggerEvent:(BHModuleEventType)eventType
+{
+    [self.moduleManager triggerEvent:eventType];
+}
+
+- (void)tiggerCustomEvent:(NSInteger)eventType
+{
+    if(eventType < 1000) {
+        return;
+    }
+    
+    [[BeeHive shareInstance] triggerEvent:eventType];
 }
 
 #pragma mark - Private
@@ -56,11 +80,11 @@
 - (void)loadStaticModules
 {
     
-    [[BHModuleManager sharedManager] loadLocalModules];
+    [self.moduleManager loadLocalModules];
     
-    [[BHModuleManager sharedManager] registedAnnotationModules];
+    [self.moduleManager registedAnnotationModules];
 
-    [[BHModuleManager sharedManager] registedAllModules];
+    [self.moduleManager registedAllModules];
     
 }
 
@@ -74,13 +98,20 @@
     
 }
 
-- (void)tiggerCustomEvent:(NSInteger)eventType
+- (BHModuleManager *)moduleManager
 {
-    if(eventType < 1000) {
-        return;
+    if (!_moduleManager) {
+        _moduleManager = [BHModuleManager new];
     }
-    
-    [[BHModuleManager sharedManager] triggerEvent:eventType];
+    return _moduleManager;
+}
+
+- (BHServiceManager *)serviceManager
+{
+    if (!_serviceManager) {
+        _serviceManager = [BHServiceManager new];
+    }
+    return _serviceManager;
 }
 
 @end
