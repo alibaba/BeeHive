@@ -25,7 +25,7 @@
     static id BHInstance = nil;
     
     dispatch_once(&p, ^{
-        BHInstance = [[self alloc] init];
+        BHInstance = [[BeeHive alloc] init];
     });
     
     return BHInstance;
@@ -33,10 +33,7 @@
 
 + (void)registerDynamicModule:(Class)moduleClass
 {
-    if (![BeeHive shareInstance].context) {
-        return;
-    }
-    [[BeeHive shareInstance] registerDynamicModule:moduleClass];
+    [[BeeHive shareInstance].moduleManager registerDynamicModule:moduleClass];
 }
 
 - (id)createService:(Protocol *)proto;
@@ -60,7 +57,7 @@
         return;
     }
     
-    [[BeeHive shareInstance] triggerEvent:eventType];
+    [self triggerEvent:eventType];
 }
 
 #pragma mark - Private
@@ -71,31 +68,12 @@
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [self loadStaticServices];
-        [self loadStaticModules];
+        
+        self.serviceManager.enableException = self.enableException;
+        [self.serviceManager loadServices];
+        
+        [self.moduleManager setupModules];
     });
-}
-
-
-- (void)loadStaticModules
-{
-    
-    [self.moduleManager loadLocalModules];
-    
-    [self.moduleManager registedAnnotationModules];
-
-    [self.moduleManager registedAllModules];
-    
-}
-
--(void)loadStaticServices
-{
-    [BHServiceManager sharedManager].enableException = self.enableException;
-    
-    [[BHServiceManager sharedManager] registerLocalServices];
-    
-    [[BHServiceManager sharedManager] registerAnnotationServices];
-    
 }
 
 - (BHModuleManager *)moduleManager

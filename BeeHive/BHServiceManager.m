@@ -20,14 +20,11 @@ static const NSString *kImpl = @"impl";
 
 @implementation BHServiceManager
 
-+ (instancetype)sharedManager
+- (void)loadServices
 {
-    static id sharedManager = nil;
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        sharedManager = [[self alloc] init];
-    });
-    return sharedManager;
+    [self registerLocalServices];
+    
+    [self registerAnnotationServices];
 }
 
 - (void)registerLocalServices
