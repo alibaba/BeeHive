@@ -32,7 +32,6 @@ BH_EXPORT_MODULE(NO)
 -(void)modInit:(BHContext *)context
 {
 
-//    [[BeeHive shareInstance] registerService:@protocol(UserTrackServiceProtocol) service:[BHUserTrackViewController class]];
 }
 
 @end

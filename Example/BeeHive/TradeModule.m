@@ -16,10 +16,8 @@
 
 @implementation TradeModule
 
-+ (void)load
-{
-    [BeeHive registerDynamicModule:[self class]];
-}
+BH_EXPORT_MODULE(YES)
+
 
 - (id)init{
     if (self = [super init])
@@ -34,9 +32,6 @@
 
 -(void)modInit:(BHContext *)context
 {
-    NSLog(@"模块初始化中");
-    NSLog(@"%@",context.moduleConfigName);
-    
     
     id<TradeServiceProtocol> service = [[BeeHive shareInstance] createService:@protocol(TradeServiceProtocol)];
     
