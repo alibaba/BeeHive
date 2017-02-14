@@ -43,8 +43,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 @interface BHModuleManager()
 
-@property(nonatomic, strong) NSMutableArray     *BHModuleDynamicClasses;
-
 @property(nonatomic, strong)  NSMutableArray      *BHModules;
 
 @end
@@ -52,6 +50,15 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 @implementation BHModuleManager
 
 #pragma mark - public
+
+- (void)setupModules
+{
+    [self loadLocalModules];
+    
+    [self registedAnnotationModules];
+    
+    [self registedAllModules];
+}
 
 - (void)loadLocalModules
 {
@@ -209,16 +216,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 
 #pragma mark - life loop
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.BHModuleDynamicClasses = [NSMutableArray array];
-    }
-    return self;
-}
-
 
 #pragma mark - private
 

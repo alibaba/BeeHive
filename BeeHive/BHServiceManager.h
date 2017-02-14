@@ -14,11 +14,7 @@
 
 @property (nonatomic, assign) BOOL  enableException;
 
-+ (instancetype)sharedManager;
-
-- (void)registerLocalServices;
-
-- (void)registerAnnotationServices;
+- (void)loadServices;
 
 - (void)registerService:(Protocol *)service implClass:(Class)implClass;
 
