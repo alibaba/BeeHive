@@ -38,6 +38,15 @@
 {
     [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
 }
+    
++ (void)triggerCustomEvent:(NSInteger)eventType
+{
+    if(eventType < 1000) {
+        return;
+    }
+    
+    [[BHModuleManager sharedManager] triggerEvent:eventType];
+}
 
 #pragma mark - Private
 
@@ -72,15 +81,6 @@
     
     [[BHServiceManager sharedManager] registerAnnotationServices];
     
-}
-
-- (void)tiggerCustomEvent:(NSInteger)eventType
-{
-    if(eventType < 1000) {
-        return;
-    }
-    
-    [[BHModuleManager sharedManager] triggerEvent:eventType];
 }
 
 @end
