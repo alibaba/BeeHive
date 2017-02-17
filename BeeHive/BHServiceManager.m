@@ -14,7 +14,7 @@ static const NSString *kImpl = @"impl";
 @interface BHServiceManager()
 
 @property (nonatomic, strong) NSMutableArray *allServices;
-@property (nonatomic, strong) NSRecursiveLock *lock;
+@property (nonatomic, strong) NSRecursiveLock *lock;
 
 @end
 
