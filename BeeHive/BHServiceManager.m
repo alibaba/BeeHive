@@ -8,6 +8,8 @@
 #import "BHServiceManager.h"
 #import "BHContext.h"
 #import "BHAnnotation.h"
+
+#define kServiceArrayKey     @"serviceClasses"
 static const NSString *kService = @"service";
 static const NSString *kImpl = @"impl";
 
@@ -38,11 +40,13 @@ static const NSString *kImpl = @"impl";
     if (!plistPath) {
         return;
     }
+    NSSet *set =
+    NSDictionary *serviceList = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
     
-    NSArray *serviceList = [[NSArray alloc] initWithContentsOfFile:plistPath];
+    NSArray *serviceArray = [serviceList objectForKey:kServiceArrayKey];
     
     [self.lock lock];
-    [self.allServices addObjectsFromArray:serviceList];
+    [self.allServices addObjectsFromArray:serviceArray];
     [self.lock unlock];
 }
 
