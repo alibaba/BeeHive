@@ -8,13 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class BHContext;
-
 @interface BHServiceManager : NSObject
 
 @property (nonatomic, assign) BOOL  enableException;
-
-+ (instancetype)sharedManager;
 
 - (void)registerLocalServices;
 

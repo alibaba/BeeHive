@@ -13,22 +13,12 @@ static const NSString *kImpl = @"impl";
 
 @interface BHServiceManager()
 
-@property (nonatomic, strong) NSMutableArray *allServices;
-@property (nonatomic, strong) NSRecursiveLock *lock;
+@property (nonatomic, strong) NSMutableArray    *allServices;
+@property (nonatomic, strong) NSRecursiveLock   *lock;
 
 @end
 
 @implementation BHServiceManager
-
-+ (instancetype)sharedManager
-{
-    static id sharedManager = nil;
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        sharedManager = [[self alloc] init];
-    });
-    return sharedManager;
-}
 
 - (void)registerLocalServices
 {

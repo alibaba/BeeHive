@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 
 @interface BHModuleManager : NSObject
 
-+ (instancetype)sharedManager;
+//+ (instancetype)sharedManager;
 
 // If you do not comply with set Level protocol, the default Normal
 - (void)registerDynamicModule:(Class)moduleClass;

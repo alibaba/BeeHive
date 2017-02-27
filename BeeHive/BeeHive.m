@@ -7,6 +7,15 @@
  */
 
 #import "BeeHive.h"
+#import "BHServiceManager.h"
+
+
+@interface BeeHive()
+
+@property (nonatomic, strong) BHServiceManager *serviceManager;
+@property (nonatomic, strong) BHModuleManager *moduleManager;
+
+@end
 
 @implementation BeeHive
 
@@ -24,19 +33,28 @@
     return BHInstance;
 }
 
-+ (void)registerDynamicModule:(Class)moduleClass
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        _serviceManager = [BHServiceManager new];
+        _moduleManager = [BHModuleManager new];
+    }
+    return self;
+}
+
+- (void)registerDynamicModule:(Class)moduleClass
 {
-    [[BHModuleManager sharedManager] registerDynamicModule:moduleClass];
+    [self.moduleManager registerDynamicModule:moduleClass];
 }
 
 - (id)createService:(Protocol *)proto;
 {
-    return [[BHServiceManager sharedManager] createService:proto];
+    return [self.serviceManager createService:proto];
 }
 
 - (void)registerService:(Protocol *)proto service:(Class) serviceClass
 {
-    [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
+    [self.serviceManager registerService:proto implClass:serviceClass];
 }
 
 #pragma mark - Private
@@ -56,22 +74,25 @@
 - (void)loadStaticModules
 {
     
-    [[BHModuleManager sharedManager] loadLocalModules];
+    [self.moduleManager loadLocalModules];
     
-    [[BHModuleManager sharedManager] registedAnnotationModules];
+    [self.moduleManager registedAnnotationModules];
 
-    [[BHModuleManager sharedManager] registedAllModules];
+    [self.moduleManager registedAllModules];
     
 }
 
 -(void)loadStaticServices
 {
-    [BHServiceManager sharedManager].enableException = self.enableException;
+    self.serviceManager.enableException = self.enableException;
     
-    [[BHServiceManager sharedManager] registerLocalServices];
+    [self.serviceManager registerLocalServices];
     
-    [[BHServiceManager sharedManager] registerAnnotationServices];
+    [self.serviceManager registerAnnotationServices];
     
+}
+- (void)triggerEvent:(BHModuleEventType)eventType{
+    [self.moduleManager triggerEvent:eventType];
 }
 
 - (void)tiggerCustomEvent:(NSInteger)eventType
@@ -80,7 +101,7 @@
         return;
     }
     
-    [[BHModuleManager sharedManager] triggerEvent:eventType];
+    [self.moduleManager triggerEvent:eventType];
 }
 
 @end
