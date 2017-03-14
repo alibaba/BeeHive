@@ -117,8 +117,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     
 }
 
-
-- (void)tiggerEvent:(BHModuleEventType)eventType
+- (void)triggerEvent:(BHModuleEventType)eventType
 {
     switch (eventType) {
         case BHMSetupEvent:
