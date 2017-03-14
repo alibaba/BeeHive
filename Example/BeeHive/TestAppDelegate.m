@@ -10,6 +10,9 @@
 #import "BeeHive.h"
 #import "BHService.h"
 #import "BHTimeProfiler.h"
+#import <mach-o/dyld.h>
+#import "BHModuleManager.h"
+#import "BHServiceManager.h"
 
 @interface TestAppDelegate ()
 

@@ -54,30 +54,6 @@ static const NSString *kImpl = @"impl";
     [self.lock unlock];
 }
 
-- (void)registerAnnotationServices
-{
-    NSArray<NSString *>*services = [BHAnnotation AnnotationServices];
-    
-    for (NSString *map in services) {
-        NSData *jsonData =  [map dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *error = nil;
-        id json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-        if (!error) {
-            if ([json isKindOfClass:[NSDictionary class]] && [json allKeys].count) {
-                
-                NSString *protocol = [json allKeys][0];
-                NSString *clsName  = [json allValues][0];
-                
-                if (protocol && clsName) {
-                    [self registerService:NSProtocolFromString(protocol) implClass:NSClassFromString(clsName)];
-                }
-                
-            }
-        }
-    }
-
-}
-
 - (void)registerService:(Protocol *)service implClass:(Class)implClass
 {
     NSParameterAssert(service != nil);

@@ -68,8 +68,6 @@
     
     [[BHModuleManager sharedManager] loadLocalModules];
     
-    [[BHModuleManager sharedManager] registedAnnotationModules];
-
     [[BHModuleManager sharedManager] registedAllModules];
     
 }
@@ -81,8 +79,6 @@
     [[BHServiceManager sharedManager] setWholeContext:self.context];
     
     [[BHServiceManager sharedManager] registerLocalServices];
-    
-    [[BHServiceManager sharedManager] registerAnnotationServices];
     
 }
 

@@ -118,23 +118,6 @@ static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUs
     
 }
 
-- (void)registedAnnotationModules
-{
-    
-    NSArray<NSString *>*mods = [BHAnnotation AnnotationModules];
-    for (NSString *modName in mods) {
-        Class cls;
-        if (modName) {
-            cls = NSClassFromString(modName);
-            
-            if (cls) {
-                [self registerDynamicModule:cls];
-            }
-        }
-    }
-}
-
-
 - (void)tiggerEvent:(BHModuleEventType)eventType
 {
     switch (eventType) {

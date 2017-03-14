@@ -8,7 +8,7 @@
 
 #import "ShopModule.h"
 #import "BeeHive.h"
-BeeHiveMod(ShopModule)
+@BeeHiveMod(ShopModule)
 @interface ShopModule() <BHModuleProtocol>
 
 @end
