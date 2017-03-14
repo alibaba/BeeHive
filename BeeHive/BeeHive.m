@@ -67,8 +67,6 @@
     
     [[BHModuleManager sharedManager] loadLocalModules];
     
-    [[BHModuleManager sharedManager] registedAnnotationModules];
-
     [[BHModuleManager sharedManager] registedAllModules];
     
 }
@@ -78,8 +76,6 @@
     [BHServiceManager sharedManager].enableException = self.enableException;
     
     [[BHServiceManager sharedManager] registerLocalServices];
-    
-    [[BHServiceManager sharedManager] registerAnnotationServices];
     
 }
 

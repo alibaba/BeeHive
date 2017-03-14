@@ -117,24 +117,8 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     
 }
 
-- (void)registedAnnotationModules
-{
-    
-    NSArray<NSString *>*mods = [BHAnnotation AnnotationModules];
-    for (NSString *modName in mods) {
-        Class cls;
-        if (modName) {
-            cls = NSClassFromString(modName);
-            
-            if (cls) {
-                [self registerDynamicModule:cls];
-            }
-        }
-    }
-}
 
-
-- (void)triggerEvent:(BHModuleEventType)eventType
+- (void)tiggerEvent:(BHModuleEventType)eventType
 {
     switch (eventType) {
         case BHMSetupEvent:
