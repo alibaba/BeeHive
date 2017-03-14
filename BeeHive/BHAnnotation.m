@@ -72,16 +72,11 @@ void initProphet() {
     _dyld_register_func_for_add_image(dyld_callback);
 }
 
-//const struct macho_header *mhp = NULL;
 NSArray<NSString *>* BHReadConfiguration(char *sectionName,const struct mach_header *mhp)
 {
     
     NSMutableArray *configs = [NSMutableArray array];
     Dl_info info;
-    if (mhp == NULL) {
-        dladdr(BHReadConfiguration, &info);
-        mhp = (struct mach_header*)info.dli_fbase;
-    }
     unsigned long size = 0;
     uintptr_t *memory = (uintptr_t*)getsectiondata(mhp, SEG_DATA, sectionName, &size);
     unsigned long counter = size/sizeof(void*);
