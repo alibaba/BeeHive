@@ -78,7 +78,6 @@ NSArray<NSString *>* BHReadConfiguration(char *sectionName,const struct mach_hea
 {
     
     NSMutableArray *configs = [NSMutableArray array];
-    Dl_info info;
     unsigned long size = 0;
     uintptr_t *memory = (uintptr_t*)getsectiondata(mhp, SEG_DATA, sectionName, &size);
     unsigned long counter = size/sizeof(void*);
