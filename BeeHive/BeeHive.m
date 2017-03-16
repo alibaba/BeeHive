@@ -7,6 +7,15 @@
  */
 
 #import "BeeHive.h"
+#import "BHServiceManager.h"
+
+
+@interface BeeHive()
+
+@property (nonatomic, strong) BHServiceManager *serviceManager;
+@property (nonatomic, strong) BHModuleManager *moduleManager;
+
+@end
 
 @implementation BeeHive
 
@@ -24,19 +33,28 @@
     return BHInstance;
 }
 
-+ (void)registerDynamicModule:(Class)moduleClass
+- (instancetype)init{
+    self = [super init];
+    if (self) {
+        _serviceManager = [BHServiceManager new];
+        _moduleManager = [BHModuleManager new];
+    }
+    return self;
+}
+
+- (void)registerDynamicModule:(Class)moduleClass
 {
-    [[BHModuleManager sharedManager] registerDynamicModule:moduleClass];
+    [self.moduleManager registerDynamicModule:moduleClass];
 }
 
 - (id)createService:(Protocol *)proto;
 {
-    return [[BHServiceManager sharedManager] createService:proto];
+    return [self.serviceManager createService:proto];
 }
 
 - (void)registerService:(Protocol *)proto service:(Class) serviceClass
 {
-    [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
+    [self.serviceManager registerService:proto implClass:serviceClass];
 }
     
 + (void)triggerCustomEvent:(NSInteger)eventType
@@ -45,7 +63,7 @@
         return;
     }
     
-    [[BHModuleManager sharedManager] triggerEvent:eventType];
+    [[BeeHive shareInstance].moduleManager triggerEvent:eventType];
 }
 
 #pragma mark - Private
@@ -65,18 +83,30 @@
 - (void)loadStaticModules
 {
     
-    [[BHModuleManager sharedManager] loadLocalModules];
+    [self.moduleManager loadLocalModules];
     
-    [[BHModuleManager sharedManager] registedAllModules];
+    [self.moduleManager registedAllModules];
     
 }
 
 -(void)loadStaticServices
 {
-    [BHServiceManager sharedManager].enableException = self.enableException;
+    self.serviceManager.enableException = self.enableException;
     
-    [[BHServiceManager sharedManager] registerLocalServices];
+    [self.serviceManager registerLocalServices];
     
+}
+- (void)triggerEvent:(BHModuleEventType)eventType{
+    [self.moduleManager triggerEvent:eventType];
+}
+
+- (void)tiggerCustomEvent:(NSInteger)eventType
+{
+    if(eventType < 1000) {
+        return;
+    }
+    
+    [self.moduleManager triggerEvent:eventType];
 }
 
 @end

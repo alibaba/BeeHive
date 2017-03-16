@@ -40,7 +40,7 @@ static void dyld_callback(const struct mach_header *mhp, intptr_t vmaddr_slide)
             cls = NSClassFromString(modName);
             
             if (cls) {
-                [[BHModuleManager sharedManager] registerDynamicModule:cls];
+                [[BeeHive shareInstance] registerDynamicModule:cls];
             }
         }
     }
@@ -60,7 +60,7 @@ static void dyld_callback(const struct mach_header *mhp, intptr_t vmaddr_slide)
                 NSString *clsName  = [json allValues][0];
                 
                 if (protocol && clsName) {
-                    [[BHServiceManager sharedManager] registerService:NSProtocolFromString(protocol) implClass:NSClassFromString(clsName)];
+                    [[BeeHive shareInstance] registerService:NSProtocolFromString(protocol) service:NSClassFromString(clsName)];
                 }
                 
             }
