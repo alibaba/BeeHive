@@ -12,7 +12,7 @@
 @class BeeHive;
 
 #define BH_EXPORT_MODULE(isAsync) \
-+ (void)load { [BeeHive registerDynamicModule:[self class]]; } \
++ (void)load { [[BeeHive shareInstance] registerDynamicModule:[self class]]; } \
 -(BOOL)async { return [[NSString stringWithUTF8String:#isAsync] boolValue];}
 
 

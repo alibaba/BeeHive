@@ -1,14 +1,14 @@
 PODS:
-  - BeeHive (1.0.0)
+  - BeeHive (1.2.0)
 
 DEPENDENCIES:
   - BeeHive (from `../`)
 
 EXTERNAL SOURCES:
   BeeHive:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  BeeHive: dbb793e909749ea3a30e205a882f1229bdc13190
+  BeeHive: a228b7cd974f530540fd461328e32d080f847047
 
 COCOAPODS: 0.39.0
