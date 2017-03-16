@@ -89,6 +89,8 @@
 {
   
     [[BeeHive shareInstance].context.openURLItem setOpenURL:url];
+    
+    [[BeeHive shareInstance].context.openURLItem setSourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
     [[BeeHive shareInstance].context.openURLItem setOptions:options];
     [[BHModuleManager sharedManager] triggerEvent:BHMOpenURLEvent];
     return YES;
