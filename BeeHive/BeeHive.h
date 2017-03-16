@@ -28,6 +28,7 @@
 
 //Registration is recommended to use a static way
 - (void)registerService:(Protocol *)proto service:(Class) serviceClass;
+
 - (void)triggerEvent:(BHModuleEventType)eventType;
 
 + (void)triggerCustomEvent:(NSInteger)eventType;

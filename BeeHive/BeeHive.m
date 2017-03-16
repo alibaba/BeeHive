@@ -96,16 +96,9 @@
     [self.serviceManager registerLocalServices];
     
 }
-- (void)triggerEvent:(BHModuleEventType)eventType{
-    [self.moduleManager triggerEvent:eventType];
-}
 
-- (void)tiggerCustomEvent:(NSInteger)eventType
+- (void)triggerEvent:(BHModuleEventType)eventType
 {
-    if(eventType < 1000) {
-        return;
-    }
-    
     [self.moduleManager triggerEvent:eventType];
 }
 
