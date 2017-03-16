@@ -18,7 +18,7 @@
 
 + (void)load
 {
-    [BeeHive registerDynamicModule:[self class]];
+    [[BeeHive shareInstance] registerDynamicModule:[self class]];
 }
 
 - (id)init{

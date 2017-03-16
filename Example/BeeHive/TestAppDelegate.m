@@ -38,6 +38,7 @@
     [[BHTimeProfiler sharedTimeProfiler] recordEventTime:@"BeeHive::super start launch"];
 
     
+    
     [super application:application didFinishLaunchingWithOptions:launchOptions];
     
     

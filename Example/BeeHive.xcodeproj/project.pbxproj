@@ -308,6 +308,7 @@
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
 				9D91291B56C69BE35F8172BD /* Copy Pods Resources */,
+				607C66309F1E80F71E841E46 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -329,6 +330,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "一渡";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = EAA28CVMQM;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -389,6 +393,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		607C66309F1E80F71E841E46 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BeeHive_Tests/Pods-BeeHive_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6DC1F2CD841B13DB5D39FA54 /* Check Pods Manifest.lock */ = {
@@ -588,6 +607,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = EAA28CVMQM;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BeeHive/BeeHive-Prefix.pch";
 				INFOPLIST_FILE = "BeeHive/BeeHive-Info.plist";
@@ -605,6 +625,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = EAA28CVMQM;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BeeHive/BeeHive-Prefix.pch";
 				INFOPLIST_FILE = "BeeHive/BeeHive-Info.plist";
