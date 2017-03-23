@@ -34,8 +34,8 @@ xcuserdata/
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
 Pods/
-/Example/Pods/
-/Example/Podfile.lock
+Example/Pods/*
+Example/Podfile.lock
 
 # Carthage
 #
