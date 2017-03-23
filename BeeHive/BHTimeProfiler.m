@@ -115,7 +115,9 @@
     {
         CFTimeInterval current = [[self.timeDataDic objectForKey:eventName] doubleValue];
         
-        NSString *output = [NSString stringWithFormat:@"%@ time stamp  %g and execute for  %g\n", eventName, current, (current - self.lastTime) * 1000];
+        NSString *output = [NSString stringWithFormat:@"[%s] time stamp: %gms and execute for %gms -> \n", [eventName UTF8String],
+                            (current - self.recordStartTime) * 1000,
+                            (current - self.lastTime) * 1000];
         
         [handle writeData:[output dataUsingEncoding:NSUTF8StringEncoding]];
         

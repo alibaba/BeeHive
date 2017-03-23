@@ -33,7 +33,6 @@
     });
     
 #ifdef DEBUG
-    [[BHTimeProfiler sharedTimeProfiler] printOutTimeProfileResult];
     [[BHTimeProfiler sharedTimeProfiler] saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
 #endif
     
