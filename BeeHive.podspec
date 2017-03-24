@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.license      = "GPL"
 
-  s.platform = :ios, '7.0'
+  s.platform = :ios, '8.0'
 
   s.author       = { "soxeon" => "dpsopower@gmail.com" }
 
