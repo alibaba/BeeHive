@@ -94,3 +94,9 @@ NSArray<NSString *>* BHReadConfiguration(char *sectionName,const struct mach_hea
 
     
 }
+
+@implementation BHAnnotation
+
+@end
+
+
