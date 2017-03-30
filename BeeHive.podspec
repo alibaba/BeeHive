@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "BeeHive"
-  s.version      = "1.2.0"
+  s.version      = "1.5.0"
   s.summary      = "BeeHive is a kind of modular programming method"
 
   s.description  = <<-DESC
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.license      = "GPL"
 
-  s.platform = :ios, '7.0'
+  s.platform = :ios, '8.0'
 
   s.author       = { "soxeon" => "dpsopower@gmail.com" }
 

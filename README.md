@@ -47,7 +47,7 @@
 - [4. Integration](#4-integration)
     - [`cocoapods`](#cocoapods)
 - [5. Author](#5-author)
-- [6. weichat group ](#6-weichat-group)
+- [6. WeChat Group](#6-wechat-group)
 - [7. License](#7-license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -314,16 +314,13 @@ pod "BeeHive", '1.1.1'
 
 # 5. Author
 
-- 一渡 shijie.qinsj@alibaba-inc.com
-- 达兹 dazi.dp@alibaba-inc.com
+- [一渡](https://github.com/rexqin) shijie.qinsj\<at>alibaba-inc\<dot>com
+- [达兹](https://github.com/SoXeon) dazi.dp\<at>alibaba-inc\<dot>com
 
-# 6. WeChat Group 
+# 6. WeChat Group
 
 Because the WeChat Group had reached to the max number of people , you can join us by search dolphinux in WeChat.
 
 # 7. License
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
- 
-
-

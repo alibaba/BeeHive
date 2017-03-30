@@ -11,7 +11,7 @@
 #import "BeeHive.h"
 
 #import "BHService.h"
-
+@BeeHiveService(UserTrackServiceProtocol,BHUserTrackViewController)
 @interface BHUserTrackViewController()<UserTrackServiceProtocol>
 
 
