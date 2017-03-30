@@ -46,7 +46,7 @@
 - [4. 集成方式](#4-%E9%9B%86%E6%88%90%E6%96%B9%E5%BC%8F)
     - [`cocoapods`](#cocoapods)
 - [5. 作者](#5-%E4%BD%9C%E8%80%85)
-- [6.微信沟通群](#6%E5%BE%AE%E4%BF%A1%E6%B2%9F%E9%80%9A%E7%BE%A4)
+- [6. 微信沟通群](#6-%E5%BE%AE%E4%BF%A1%E6%B2%9F%E9%80%9A%E7%BE%A4)
 - [7. 开源许可证](#7-%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E8%AF%81)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -302,15 +302,13 @@ pod "BeeHive", '1.1.1'
 
 # 5. 作者
 
-- 一渡 shijie.qinsj@alibaba-inc.com
-- 达兹 dazi.dp@alibaba-inc.com
+- [一渡](https://github.com/rexqin) shijie.qinsj\<at>alibaba-inc\<dot>com
+- [达兹](https://github.com/SoXeon) dazi.dp\<at>alibaba-inc\<dot>com
 
-# 6.微信沟通群
+# 6. 微信沟通群
 
 微信群已达人数上限，可以通过微信加：dolphinux ，然后邀请进入微信群。
 
 # 7. 开源许可证
 
 BeeHive is available under the GPL license. See the LICENSE file for more info.
-
-

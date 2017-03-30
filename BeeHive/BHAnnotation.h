@@ -8,6 +8,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import "BeeHive.h"
 
 #ifndef BeehiveModSectName
 
@@ -27,14 +28,11 @@
 
 
 #define BeeHiveMod(name) \
-char * k##name##_mod BeeHiveDATA(BeehiveMods) = ""#name"";
+class BeeHive; char * k##name##_mod BeeHiveDATA(BeehiveMods) = ""#name"";
 
 #define BeeHiveService(servicename,impl) \
-char * k##servicename##_service BeeHiveDATA(BeehiveServices) = "{ \""#servicename"\" : \""#impl"\"}";
+class BeeHive;char * k##servicename##_service BeeHiveDATA(BeehiveServices) = "{ \""#servicename"\" : \""#impl"\"}";
 
 @interface BHAnnotation : NSObject
-
-+ (NSArray<NSString *> *)AnnotationModules;
-+ (NSArray<NSString *> *)AnnotationServices;
 
 @end

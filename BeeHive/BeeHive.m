@@ -38,6 +38,15 @@
 {
     [[BHServiceManager sharedManager] registerService:proto implClass:serviceClass];
 }
+    
++ (void)triggerCustomEvent:(NSInteger)eventType
+{
+    if(eventType < 1000) {
+        return;
+    }
+    
+    [[BHModuleManager sharedManager] triggerEvent:eventType];
+}
 
 #pragma mark - Private
 
@@ -58,8 +67,6 @@
     
     [[BHModuleManager sharedManager] loadLocalModules];
     
-    [[BHModuleManager sharedManager] registedAnnotationModules];
-
     [[BHModuleManager sharedManager] registedAllModules];
     
 }
@@ -70,17 +77,6 @@
     
     [[BHServiceManager sharedManager] registerLocalServices];
     
-    [[BHServiceManager sharedManager] registerAnnotationServices];
-    
-}
-
-- (void)tiggerCustomEvent:(NSInteger)eventType
-{
-    if(eventType < 1000) {
-        return;
-    }
-    
-    [[BHModuleManager sharedManager] triggerEvent:eventType];
 }
 
 @end
