@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D85037D31B9C6D8400864DF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85037D21B9C6D8400864DF0 /* Foundation.framework */; };
 		D85037D81B9C6D8400864DF0 /* BeeHive-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = D85037D71B9C6D8400864DF0 /* BeeHive-Prefix.pch */; };
 		D85037DA1B9C6D8400864DF0 /* BeeHive-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D85037D91B9C6D8400864DF0 /* BeeHive-Info.plist */; };
-		D85038001B9C70BE00864DF0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85037FF1B9C70BE00864DF0 /* UIKit.framework */; };
 		D8B050571B9ED5EF004F67D6 /* BeeHive.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B050551B9ED5EF004F67D6 /* BeeHive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8B050581B9ED5EF004F67D6 /* BeeHive.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B050561B9ED5EF004F67D6 /* BeeHive.m */; };
 		E20133881E489237000B37DC /* BeeHiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E20133871E489237000B37DC /* BeeHiveTests.m */; };
@@ -77,8 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D85038001B9C70BE00864DF0 /* UIKit.framework in Frameworks */,
-				D85037D31B9C6D8400864DF0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
