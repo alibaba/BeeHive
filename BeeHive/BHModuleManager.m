@@ -33,6 +33,8 @@ static  NSString *kFailToRegisterForRemoteNotificationsSelector = @"modDidFailTo
 static  NSString *kDidRegisterForRemoteNotificationsSelector = @"modDidRegisterForRemoteNotifications:";
 static  NSString *kDidReceiveRemoteNotificationsSelector = @"modDidReceiveRemoteNotification:";
 static  NSString *kDidReceiveLocalNotificationsSelector = @"modDidReceiveLocalNotification:";
+static  NSString *kWillPresentNotificationSelector = @"modWillPresentNotification:";
+static  NSString *kDidReceiveNotificationResponseSelector = @"modDidReceiveNotificationResponse:";
 static  NSString *kWillContinueUserActivitySelector = @"modWillContinueUserActivity:";
 static  NSString *kContinueUserActivitySelector = @"modContinueUserActivity:";
 static  NSString *kDidUpdateContinueUserActivitySelector = @"modDidUpdateContinueUserActivity:";
@@ -161,6 +163,12 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
             
         case BHMDidReceiveRemoteNotificationEvent:
             [self handleModuleEvent:kDidReceiveRemoteNotificationsSelector];
+            break;
+        case BHMWillPresentNotificationEvent:
+            [self handleModuleEvent:kWillPresentNotificationSelector];
+            break;
+        case BHMDidReceiveNotificationResponseEvent:
+            [self handleModuleEvent:kDidReceiveNotificationResponseSelector];
             break;
 
         case BHMDidFailToRegisterForRemoteNotificationsEvent:

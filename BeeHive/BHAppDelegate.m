@@ -13,6 +13,11 @@
 #import "BHModuleManager.h"
 #import "BHTimeProfiler.h"
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > 100000
+#import <UserNotifications/UserNotifications.h>
+#endif
+
+
 @interface BHAppDelegate ()
 
 @end
@@ -167,6 +172,21 @@
     }
     return YES;
 }
+#endif
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > 100000
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
+    [[BeeHive shareInstance].context.notificationsItem setNotification: notification];
+    [[BeeHive shareInstance].context.notificationsItem setNotificationPresentationOptionsHandler: completionHandler];
+    [[BeeHive shareInstance].context.notificationsItem setCenter:center];
+    [[BHModuleManager sharedManager] triggerEvent:BHMWillPresentNotificationEvent];
+};
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler {
+    [[BeeHive shareInstance].context.notificationsItem setNotificationResponse: response];
+    [[BeeHive shareInstance].context.notificationsItem setNotificationCompletionHandler:completionHandler];
+    [[BeeHive shareInstance].context.notificationsItem setCenter:center];
+    [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveNotificationResponseEvent];
+};
 #endif
 
 @end
