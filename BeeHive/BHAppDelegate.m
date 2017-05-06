@@ -13,7 +13,7 @@
 #import "BHModuleManager.h"
 #import "BHTimeProfiler.h"
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > 100000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
 #import <UserNotifications/UserNotifications.h>
 #endif
 
@@ -173,7 +173,7 @@
     return YES;
 }
 #endif
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > 100000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
     [[BeeHive shareInstance].context.notificationsItem setNotification: notification];
     [[BeeHive shareInstance].context.notificationsItem setNotificationPresentationOptionsHandler: completionHandler];
