@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
     BHMDidRegisterForRemoteNotificationsEvent,
     BHMDidReceiveRemoteNotificationEvent,
     BHMDidReceiveLocalNotificationEvent,
+    BHMWillPresentNotificationEvent,
+    BHMDidReceiveNotificationResponseEvent,
     BHMWillContinueUserActivityEvent,
     BHMContinueUserActivityEvent,
     BHMDidFailToContinueUserActivityEvent,
