@@ -28,13 +28,13 @@ typedef void (^BHNotificationCompletionHandler)();
 @property (nonatomic, strong) NSError *notificationsError;
 @property (nonatomic, strong) NSData *deviceToken;
 @property (nonatomic, strong) NSDictionary *userInfo;
-@property (nonatomic, copy) BHNotificationResultHandler notificationResultHander;
+@property (nonatomic, weak) BHNotificationResultHandler notificationResultHander;
 @property (nonatomic, strong) UILocalNotification *localNotification;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
 @property (nonatomic, strong) UNNotification *notification;
 @property (nonatomic, strong) UNNotificationResponse *notificationResponse;
-@property (nonatomic, copy) BHNotificationPresentationOptionsHandler notificationPresentationOptionsHandler;
-@property (nonatomic, copy) BHNotificationCompletionHandler notificationCompletionHandler;
+@property (nonatomic, weak) BHNotificationPresentationOptionsHandler notificationPresentationOptionsHandler;
+@property (nonatomic, weak) BHNotificationCompletionHandler notificationCompletionHandler;
 @property (nonatomic, strong) UNUserNotificationCenter *center;
 #endif
 
