@@ -20,8 +20,7 @@
 
 @implementation BHUserTrackViewController
 
-
--(BOOL)singleton
++(BOOL)singleton
 {
     return NO;
 }
