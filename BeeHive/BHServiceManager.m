@@ -86,23 +86,26 @@ static const NSString *kImpl = @"impl";
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ protocol does not been registed", NSStringFromProtocol(service)] userInfo:nil];
     }
     
-    id protocolImpl = [[BHContext shareInstance] getServiceInstanceFromServiceName:NSStringFromProtocol(service)];
+    NSString *serviceStr = NSStringFromProtocol(service);
+    id protocolImpl = [[BHContext shareInstance] getServiceInstanceFromServiceName:serviceStr];
     if (protocolImpl) {
         return protocolImpl;
     }
     
     Class implClass = [self serviceImplClass:service];
-    Method clzSingleMethod = class_getInstanceMethod(implClass, @selector(singleton));
-    Method insSingleMethod = class_getClassMethod(implClass, @selector(singleton));
-    if (clzSingleMethod == NULL &&
-        insSingleMethod == NULL) {
-        return [implClass new];
+    if ([[implClass class] respondsToSelector:@selector(singleton)]) {
+        if ([[implClass class] singleton]) {
+            if ([[implClass class] respondsToSelector:@selector(shareInstance)])
+                implInstance = [[implClass class] shareInstance];
+            else
+                implInstance = [[implClass alloc] init];
+            
+            [[BHContext shareInstance] addServiceWithImplInstance:implInstance serviceName:serviceStr];
+            return implInstance;
+        }
     }
-
-    implInstance = [[implClass alloc] init];
-    NSString *serviceStr = NSStringFromProtocol(service);
-    [[BHContext shareInstance] addServiceWithImplInstance:implInstance serviceName:serviceStr];
-    return implInstance;
+    
+    return [[implClass alloc] init];
 }
 
 #pragma mark - private
