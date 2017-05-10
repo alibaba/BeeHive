@@ -61,6 +61,10 @@
 
 - (void)modDidReceiveLocalNotification:(BHContext *)context;
 
+- (void)modWillPresentNotification:(BHContext *)context;
+
+- (void)modDidReceiveNotificationResponse:(BHContext *)context;
+
 - (void)modWillContinueUserActivity:(BHContext *)context;
 
 - (void)modContinueUserActivity:(BHContext *)context;

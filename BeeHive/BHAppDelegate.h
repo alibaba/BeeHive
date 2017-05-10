@@ -8,21 +8,35 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
+#import <UserNotifications/UserNotifications.h>
+#endif
 
 
 @interface BHAppDelegate : UIResponder <UIApplicationDelegate>
 
 @end
 
-typedef void (^notificationResultHandler)(UIBackgroundFetchResult);
+typedef void (^BHNotificationResultHandler)(UIBackgroundFetchResult);
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
+typedef void (^BHNotificationPresentationOptionsHandler)(UNNotificationPresentationOptions options);
+typedef void (^BHNotificationCompletionHandler)();
+#endif
 
 @interface BHNotificationsItem : NSObject
 
 @property (nonatomic, strong) NSError *notificationsError;
 @property (nonatomic, strong) NSData *deviceToken;
 @property (nonatomic, strong) NSDictionary *userInfo;
-@property (nonatomic, assign) notificationResultHandler notificationResultHander;
+@property (nonatomic, weak) BHNotificationResultHandler notificationResultHander;
 @property (nonatomic, strong) UILocalNotification *localNotification;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
+@property (nonatomic, strong) UNNotification *notification;
+@property (nonatomic, strong) UNNotificationResponse *notificationResponse;
+@property (nonatomic, weak) BHNotificationPresentationOptionsHandler notificationPresentationOptionsHandler;
+@property (nonatomic, weak) BHNotificationCompletionHandler notificationCompletionHandler;
+@property (nonatomic, strong) UNUserNotificationCenter *center;
+#endif
 
 @end
 
