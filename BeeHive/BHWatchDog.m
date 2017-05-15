@@ -85,7 +85,7 @@ typedef void (^watchdogFiredCallBack)();
 
 - (instancetype)initWIthThreshold:(double)threshold callBack:(watchdogFiredCallBack)callBack
 {
-    if ([self init]) {
+    if (self = [self init]) {
         self.threshold = 0.4;//默认间隔
         self.threshold = threshold;
         self.pingThread = [[PingThread alloc] initWithThreshold:threshold handler:callBack];
