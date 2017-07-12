@@ -47,6 +47,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 @property(nonatomic, strong) NSMutableArray     *BHModuleDynamicClasses;
 
+@property(nonatomic, strong) NSMutableArray<NSDictionary *>     *BHModuleInfos;
 @property(nonatomic, strong) NSMutableArray     *BHModules;
 
 @property(nonatomic, strong) NSMutableDictionary<NSNumber *, NSMutableArray<id<BHModuleProtocol>> *> *BHModulesByEvent;
@@ -80,7 +81,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     
     NSArray *modulesArray = [moduleList objectForKey:kModuleArrayKey];
     
-    [self.BHModules addObjectsFromArray:modulesArray];
+    [self.BHModuleInfos addObjectsFromArray:modulesArray];
     
 }
 
@@ -93,7 +94,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 - (void)registedAllModules
 {
 
-    [self.BHModules sortUsingComparator:^NSComparisonResult(NSDictionary *module1, NSDictionary *module2) {
+    [self.BHModuleInfos sortUsingComparator:^NSComparisonResult(NSDictionary *module1, NSDictionary *module2) {
       NSNumber *module1Level = (NSNumber *)[module1 objectForKey:kModuleInfoLevelKey];
       NSNumber *module2Level =  (NSNumber *)[module2 objectForKey:kModuleInfoLevelKey];
         
@@ -103,7 +104,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     NSMutableArray *tmpArray = [NSMutableArray array];
     
     //module init
-    [self.BHModules enumerateObjectsUsingBlock:^(NSDictionary *module, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.BHModuleInfos enumerateObjectsUsingBlock:^(NSDictionary *module, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSString *classStr = [module objectForKey:kModuleInfoNameKey];
         
@@ -197,7 +198,23 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
             [moduleInfo setObject:moduleName forKey:kModuleInfoNameKey];
         }
 
-        [self.BHModules addObject:moduleInfo];
+        [self.BHModuleInfos addObject:moduleInfo];
+        
+        id<BHModuleProtocol> moduleInstance = [[class alloc] init];
+        [self.BHModules addObject:moduleInstance];
+        [self.BHModules sortUsingComparator:^NSComparisonResult(id<BHModuleProtocol> moduleInstance1, id<BHModuleProtocol> moduleInstance2) {
+            NSNumber *module1Level = @(BHModuleNormal);
+            NSNumber *module2Level = @(BHModuleNormal);
+            if ([moduleInstance1 respondsToSelector:@selector(basicModuleLevel)]) {
+                module1Level = @(BHModuleBasic);
+            }
+            if ([moduleInstance2 respondsToSelector:@selector(basicModuleLevel)]) {
+                module2Level = @(BHModuleBasic);
+            }
+            
+            return [module1Level intValue] > [module2Level intValue];
+        }];
+        [self registerEventsByModuleInstance:moduleInstance];
     }
 }
 
@@ -237,6 +254,12 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 }
 
 #pragma mark - property setter or getter
+- (NSMutableArray<NSDictionary *> *)BHModuleInfos {
+    if (!_BHModuleInfos) {
+        _BHModuleInfos = @[].mutableCopy;
+    }
+    return _BHModuleInfos;
+}
 
 - (NSMutableArray *)BHModules
 {
