@@ -47,7 +47,10 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 @property(nonatomic, strong) NSMutableArray     *BHModuleDynamicClasses;
 
-@property(nonatomic, strong)  NSMutableArray      *BHModules;
+@property(nonatomic, strong) NSMutableArray     *BHModules;
+
+@property(nonatomic, strong) NSMutableDictionary<NSNumber *, NSMutableArray<id<BHModuleProtocol>> *> *BHModulesByEvent;
+@property(nonatomic, strong) NSMutableDictionary<NSNumber *, NSString *> *BHSelectorByEvent;
 
 @end
 
@@ -117,96 +120,21 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
     [self.BHModules addObjectsFromArray:tmpArray];
     
+    [self registerAllSystemEvents];
 }
 
-- (void)triggerEvent:(BHModuleEventType)eventType
-{
-    switch (eventType) {
-        case BHMSetupEvent:
-            [self handleModuleEvent:kSetupSelector];
-            break;
-        case BHMInitEvent:
-            //special
-            [self handleModulesInitEvent];
-            break;
-        case BHMTearDownEvent:
-            //special
-            [self handleModulesTearDownEvent];
-            break;
-        case BHMSplashEvent:
-            [self handleModuleEvent:kSplashSeletor];
-            break;
-        case BHMWillResignActiveEvent:
-            [self handleModuleEvent:kWillResignActiveSelector];
-            break;
-        case BHMDidEnterBackgroundEvent:
-            [self handleModuleEvent:kDidEnterBackgroundSelector];
-            break;
-        case BHMWillEnterForegroundEvent:
-            [self handleModuleEvent:kWillEnterForegroundSelector];
-            break;
-        case BHMDidBecomeActiveEvent:
-            [self handleModuleEvent:kDidBecomeActiveSelector];
-            break;
-        case BHMWillTerminateEvent:
-            [self handleModuleEvent:kWillTerminateSelector];
-            break;
-        case BHMUnmountEvent:
-            [self handleModuleEvent:kUnmountEventSelector];
-            break;
-        case BHMOpenURLEvent:
-            [self handleModuleEvent:kOpenURLSelector];
-            break;
-        case BHMDidReceiveMemoryWarningEvent:
-            [self handleModuleEvent:kDidReceiveMemoryWarningSelector];
-            break;
-            
-        case BHMDidReceiveRemoteNotificationEvent:
-            [self handleModuleEvent:kDidReceiveRemoteNotificationsSelector];
-            break;
-        case BHMWillPresentNotificationEvent:
-            [self handleModuleEvent:kWillPresentNotificationSelector];
-            break;
-        case BHMDidReceiveNotificationResponseEvent:
-            [self handleModuleEvent:kDidReceiveNotificationResponseSelector];
-            break;
-
-        case BHMDidFailToRegisterForRemoteNotificationsEvent:
-            [self handleModuleEvent:kFailToRegisterForRemoteNotificationsSelector];
-            break;
-        case BHMDidRegisterForRemoteNotificationsEvent:
-            [self handleModuleEvent:kDidRegisterForRemoteNotificationsSelector];
-            break;
-            
-        case BHMDidReceiveLocalNotificationEvent:
-            [self handleModuleEvent:kDidReceiveLocalNotificationsSelector];
-            break;
-            
-        case BHMWillContinueUserActivityEvent:
-            [self handleModuleEvent:kWillContinueUserActivitySelector];
-            break;
-            
-        case BHMContinueUserActivityEvent:
-            [self handleModuleEvent:kContinueUserActivitySelector];
-            break;
-            
-        case BHMDidFailToContinueUserActivityEvent:
-            [self handleModuleEvent:kFailToContinueUserActivitySelector];
-            break;
-            
-        case BHMDidUpdateUserActivityEvent:
-            [self handleModuleEvent:kDidUpdateContinueUserActivitySelector];
-            break;
-            
-        case BHMQuickActionEvent:
-            [self handleModuleEvent:kQuickActionSelector];
-            break;
-            
-        default:
-            [BHContext shareInstance].customEvent = eventType;
-            [self handleModuleEvent:kAppCustomSelector];
-            break;
+- (void)registerCustomEvent:(NSInteger)eventType
+   withModuleInstance:(id)moduleInstance
+       andSelectorStr:(NSString *)selectorStr {
+    if (eventType < 1000) {
+        return;
     }
+    [self registerEvent:eventType withModuleInstance:moduleInstance andSelectorStr:selectorStr];
+}
+
+- (void)triggerEvent:(NSInteger)eventType
+{
+    [self handleModuleEvent:eventType];
 }
 
 
@@ -273,6 +201,41 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     }
 }
 
+- (void)registerAllSystemEvents
+{
+    [self.BHModules enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self registerEventsByModuleInstance:moduleInstance];
+    }];
+}
+
+- (void)registerEventsByModuleInstance:(id<BHModuleProtocol>)moduleInstance
+{
+    NSArray<NSNumber *> *events = self.BHSelectorByEvent.allKeys;
+    [events enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self registerEvent:obj.integerValue withModuleInstance:moduleInstance andSelectorStr:self.BHSelectorByEvent[obj]];
+    }];
+}
+
+- (void)registerEvent:(NSInteger)eventType
+         withModuleInstance:(id)moduleInstance
+             andSelectorStr:(NSString *)selectorStr {
+    SEL selector = NSSelectorFromString(selectorStr);
+    if (!selector || ![moduleInstance respondsToSelector:selector]) {
+        return;
+    }
+    NSNumber *eventTypeNumber = @(eventType);
+    if (![self.BHSelectorByEvent.allKeys containsObject:eventTypeNumber]) {
+        [self.BHSelectorByEvent setObject:selectorStr forKey:eventTypeNumber];
+    }
+    if (![self.BHModulesByEvent.allKeys containsObject:eventTypeNumber]) {
+        [self.BHModulesByEvent setObject:@[].mutableCopy forKey:eventTypeNumber];
+    }
+    NSMutableArray *eventModules = [self.BHModulesByEvent objectForKey:eventTypeNumber];
+    if (![eventModules containsObject:moduleInstance]) {
+        [eventModules addObject:moduleInstance];
+    }
+}
+
 #pragma mark - property setter or getter
 
 - (NSMutableArray *)BHModules
@@ -283,12 +246,81 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     return _BHModules;
 }
 
+- (NSMutableDictionary<NSNumber *, NSMutableArray<id<BHModuleProtocol>> *> *)BHModulesByEvent
+{
+    if (!_BHModulesByEvent) {
+        _BHModulesByEvent = @{}.mutableCopy;
+    }
+    return _BHModulesByEvent;
+}
+
+- (NSMutableDictionary<NSNumber *, NSString *> *)BHSelectorByEvent
+{
+    if (!_BHSelectorByEvent) {
+        _BHSelectorByEvent = @{
+                               @(BHMSetupEvent):kSetupSelector,
+                               @(BHMInitEvent):kInitSelector,
+                               @(BHMTearDownEvent):kTearDownSelector,
+                               @(BHMSplashEvent):kSplashSeletor,
+                               @(BHMWillResignActiveEvent):kWillResignActiveSelector,
+                               @(BHMDidEnterBackgroundEvent):kDidEnterBackgroundSelector,
+                               @(BHMWillEnterForegroundEvent):kWillEnterForegroundSelector,
+                               @(BHMDidBecomeActiveEvent):kDidBecomeActiveSelector,
+                               @(BHMWillTerminateEvent):kWillTerminateSelector,
+                               @(BHMUnmountEvent):kUnmountEventSelector,
+                               @(BHMOpenURLEvent):kOpenURLSelector,
+                               @(BHMDidReceiveMemoryWarningEvent):kDidReceiveMemoryWarningSelector,
+                               
+                               @(BHMDidReceiveRemoteNotificationEvent):kDidReceiveRemoteNotificationsSelector,
+                               @(BHMWillPresentNotificationEvent):kWillPresentNotificationSelector,
+                               @(BHMDidReceiveNotificationResponseEvent):kDidReceiveNotificationResponseSelector,
+                               
+                               @(BHMDidFailToRegisterForRemoteNotificationsEvent):kFailToRegisterForRemoteNotificationsSelector,
+                               @(BHMDidRegisterForRemoteNotificationsEvent):kDidRegisterForRemoteNotificationsSelector,
+                               
+                               @(BHMDidReceiveLocalNotificationEvent):kDidReceiveLocalNotificationsSelector,
+                               
+                               @(BHMWillContinueUserActivityEvent):kWillContinueUserActivitySelector,
+                               
+                               @(BHMContinueUserActivityEvent):kContinueUserActivitySelector,
+                               
+                               @(BHMDidFailToContinueUserActivityEvent):kFailToContinueUserActivitySelector,
+                               
+                               @(BHMDidUpdateUserActivityEvent):kDidUpdateContinueUserActivitySelector,
+                               
+                               @(BHMQuickActionEvent):kQuickActionSelector,
+                               @(BHMDidCustomEvent):kAppCustomSelector,
+                               }.mutableCopy;
+    }
+    return _BHSelectorByEvent;
+}
+
 #pragma mark - module protocol
+- (void)handleModuleEvent:(NSInteger)eventType
+{
+    switch (eventType) {
+        case BHMInitEvent:
+            //special
+            [self handleModulesInitEvent];
+            break;
+        case BHMTearDownEvent:
+            //special
+            [self handleModulesTearDownEvent];
+            break;
+        default: {
+            NSString *selectorStr = [self.BHSelectorByEvent objectForKey:@(eventType)];
+            [self handleModuleEvent:eventType withSeletorStr:selectorStr];
+        }
+            break;
+    }
+    
+}
 
 - (void)handleModulesInitEvent
 {
+    NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMInitEvent)];
     
-    [self.BHModules enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
+    [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         __weak typeof(&*self) wself = self;
         void ( ^ bk )();
         bk = ^(){
@@ -321,27 +353,32 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 - (void)handleModulesTearDownEvent
 {
+    NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMTearDownEvent)];
     //Reverse Order to unload
-    for (int i = (int)self.BHModules.count - 1; i >= 0; i--) {
-        id<BHModuleProtocol> moduleInstance = [self.BHModules objectAtIndex:i];
+    for (int i = (int)moduleInstances.count - 1; i >= 0; i--) {
+        id<BHModuleProtocol> moduleInstance = [moduleInstances objectAtIndex:i];
         if (moduleInstance && [moduleInstance respondsToSelector:@selector(modTearDown:)]) {
             [moduleInstance modTearDown:[BHContext shareInstance]];
         }
     }
 }
 
-- (void)handleModuleEvent:(NSString *)selectorStr
+- (void)handleModuleEvent:(NSInteger)eventType withSeletorStr:(NSString *)selectorStr
 {
+    if (eventType >= 1000) {
+        [BHContext shareInstance].customEvent = eventType;
+    }
     SEL seletor = NSSelectorFromString(selectorStr);
-    [self.BHModules enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(eventType)];
+    [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([moduleInstance respondsToSelector:seletor]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
             [moduleInstance performSelector:seletor withObject:[BHContext shareInstance]];
 #pragma clang diagnostic pop
-
-        [[BHTimeProfiler sharedTimeProfiler] recordEventTime:[NSString stringWithFormat:@"%@ --- %@", [moduleInstance class], NSStringFromSelector(seletor)]];
-
+            
+            [[BHTimeProfiler sharedTimeProfiler] recordEventTime:[NSString stringWithFormat:@"%@ --- %@", [moduleInstance class], NSStringFromSelector(seletor)]];
+            
         }
     }];
 }
