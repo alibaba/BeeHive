@@ -57,7 +57,13 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 
 - (void)registedAllModules;
 
-- (void)triggerEvent:(BHModuleEventType)eventType;
+- (void)registerCustomEvent:(NSInteger)eventType
+         withModuleInstance:(id)moduleInstance
+             andSelectorStr:(NSString *)selectorStr;
+
+- (void)triggerEvent:(NSInteger)eventType;
+
+
 
 @end
 
