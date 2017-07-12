@@ -120,6 +120,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
     [self.BHModules addObjectsFromArray:tmpArray];
     
+    [self registerAllSystemEvents];
 }
 
 - (void)registerCustomEvent:(NSInteger)eventType
@@ -200,7 +201,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     }
 }
 
-- (void)registerAllEvents
+- (void)registerAllSystemEvents
 {
     [self.BHModules enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         [self registerEventsByModuleInstance:moduleInstance];
