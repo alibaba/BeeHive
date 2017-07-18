@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4DB2BE951F1CBDE1006DB06E /* BHRouter.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DB2BE931F1CBDE1006DB06E /* BHRouter.h */; };
+		4DB2BE961F1CBDE1006DB06E /* BHRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DB2BE941F1CBDE1006DB06E /* BHRouter.m */; };
 		D85037D81B9C6D8400864DF0 /* BeeHive-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = D85037D71B9C6D8400864DF0 /* BeeHive-Prefix.pch */; };
 		D85037DA1B9C6D8400864DF0 /* BeeHive-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D85037D91B9C6D8400864DF0 /* BeeHive-Info.plist */; };
 		D8B050571B9ED5EF004F67D6 /* BeeHive.h in Headers */ = {isa = PBXBuildFile; fileRef = D8B050551B9ED5EF004F67D6 /* BeeHive.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -37,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		0E496C5F1E4B277D0012851F /* BHCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BHCommon.h; sourceTree = "<group>"; };
+		4DB2BE931F1CBDE1006DB06E /* BHRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHRouter.h; sourceTree = "<group>"; };
+		4DB2BE941F1CBDE1006DB06E /* BHRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BHRouter.m; sourceTree = "<group>"; };
 		D85037CF1B9C6D8400864DF0 /* BeeHive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = BeeHive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D85037D21B9C6D8400864DF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		D85037D61B9C6D8400864DF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 				E232FEA51CF311EE00CBFA52 /* BHTimeProfiler.m */,
 				E232FEA81CF311F800CBFA52 /* BHWatchDog.h */,
 				E232FEA91CF311F800CBFA52 /* BHWatchDog.m */,
+				4DB2BE931F1CBDE1006DB06E /* BHRouter.h */,
+				4DB2BE941F1CBDE1006DB06E /* BHRouter.m */,
 				E22E60111BEB923700C195E4 /* BHModuleProtocol.h */,
 				E22E60221BEB924200C195E4 /* BHServiceProtocol.h */,
 				0E496C5F1E4B277D0012851F /* BHCommon.h */,
@@ -193,6 +199,7 @@
 				E286CAAD1CB4B27A004E6640 /* BHServiceManager.h in Headers */,
 				F857731A1DCDC275005C8AF5 /* BHAnnotation.h in Headers */,
 				E22E601A1BEB923700C195E4 /* BHContext.h in Headers */,
+				4DB2BE951F1CBDE1006DB06E /* BHRouter.h in Headers */,
 				D8B050571B9ED5EF004F67D6 /* BeeHive.h in Headers */,
 				D85037D81B9C6D8400864DF0 /* BeeHive-Prefix.pch in Headers */,
 			);
@@ -338,6 +345,7 @@
 				F857731B1DCDC275005C8AF5 /* BHAnnotation.m in Sources */,
 				E22E60191BEB923700C195E4 /* BHConfig.m in Sources */,
 				E286CAAE1CB4B27A004E6640 /* BHServiceManager.m in Sources */,
+				4DB2BE961F1CBDE1006DB06E /* BHRouter.m in Sources */,
 				E232FEA71CF311EE00CBFA52 /* BHTimeProfiler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
