@@ -63,6 +63,9 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 
 - (void)triggerEvent:(NSInteger)eventType;
 
+- (void)triggerEvent:(NSInteger)eventType
+     withCustomParam:(NSDictionary *)customParam;
+
 
 
 @end
