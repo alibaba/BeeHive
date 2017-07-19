@@ -8,15 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const BHRModuleScheme = @"BHRouterModuleScheme";
-static NSString *const BHRServiceScheme = @"BHRouterServiceScheme";
-
-static NSString *const BHRViewControlerEnterModePatternPush = @"push";
-static NSString *const BHRViewControlerEnterModePatternModal = @"modal";
-
-static NSString *const BHRViewControlerPathSubPattern = @".";
-
+static NSString *const BHRURLSchemeGlobalKey = @"URLGlobalScheme";
+static NSString *const BHRURLHostCallService = @"call.service.beehive";
+static NSString *const BHRURLHostRegister = @"register.beehive";
+static NSString *const BHRURLHostJumpViewController = @"jump.vc.beehive";
+static NSString *const BHRURLSubPathSplitPattern = @".";
 static NSString *const BHRURLQueryParamsKey = @"params";
+static NSString *const BHRURLFragmentViewControlerEnterModePush = @"push";
+static NSString *const BHRURLFragmentViewControlerEnterModeModal = @"modal";
+
+
 
 typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *params);
 
@@ -26,8 +27,7 @@ typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *param
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)new NS_UNAVAILABLE;
 
-+ (instancetype)moduleRouter;
-+ (instancetype)serviceRouter;
++ (instancetype)globalRouter;
 + (instancetype)routerForScheme:(NSString *)scheme;
 
 + (void)unRegisterRouterForScheme:(NSString *)scheme;
@@ -41,7 +41,7 @@ typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *param
         handler:(BHRPathComponentCustomHandler)handler;
 - (void)removePathComponent:(NSString *)pathComponentKey;
 
-//url - >  BHRouterServiceScheme://bundleid/pathComponentKey.protocolName.push(modal)/...?params={}(value url encode)#push
+//url - >  com.alibaba.beehive://call.service.beehive/pathComponentKey.protocolName.push(modal)/...?params={}(value url encode)#push
 //params -> {pathComponentKey:{paramName:paramValue,...},...}
 + (BOOL)canOpenURL:(NSURL *)URL;
 + (BOOL)openURL:(NSURL *)URL;
@@ -49,6 +49,6 @@ typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *param
      withParams:(NSDictionary<NSString *, NSDictionary<NSString *, id> *> *)params;
 + (BOOL)openURL:(NSURL *)URL
      withParams:(NSDictionary<NSString *, NSDictionary<NSString *, id> *> *)params
-        andThen:(void(^)(NSURL *URL))then;
+        andThen:(void(^)(NSString *pathComponentKey, id obj, id returnValue))then;
 
 @end

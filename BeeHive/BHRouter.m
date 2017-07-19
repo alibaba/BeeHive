@@ -24,6 +24,13 @@ typedef NS_ENUM(NSUInteger, BHRViewControlerEnterMode) {
     BHRViewControlerEnterModeModal
 };
 
+typedef NS_ENUM(NSUInteger, BHRUsage) {
+    BHRUsageUnknown,
+    BHRUsageCallService,
+    BHRUsageJumpViewControler,
+    BHRUsageRegister
+};
+
 static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
 
 
@@ -41,6 +48,8 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
 
 
 @end
+
+static NSString *BHRURLGlobalScheme = nil;
 
 @interface BHRouter ()
 
@@ -61,13 +70,23 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
 
 #pragma mark - router init
 
-+ (instancetype)moduleRouter
++ (instancetype)globalRouter
 {
-    return [self routerForScheme:BHRModuleScheme];
-}
-+ (instancetype)serviceRouter
-{
-    return [self routerForScheme:BHRServiceScheme];
+    if (!BHRURLGlobalScheme) {
+        NSString *plistPath = [[NSBundle mainBundle] pathForResource:[BHContext shareInstance].moduleConfigName ofType:@"plist"];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
+            NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+            BHRURLGlobalScheme = [plist objectForKey:BHRURLSchemeGlobalKey];
+        }
+        if (!BHRURLGlobalScheme.length) {
+            NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+            BHRURLGlobalScheme = [infoDictionary objectForKey:@"CFBundleIdentifier"];
+        }
+        if (!BHRURLGlobalScheme.length) {
+            BHRURLGlobalScheme = @"com.alibaba.beehive";
+        }
+    }
+    return [self routerForScheme:BHRURLGlobalScheme];
 }
 + (instancetype)routerForScheme:(NSString *)scheme
 {
@@ -136,6 +155,13 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
     if (!scheme.length) {
         return NO;
     }
+    
+    NSString *host = URL.host;
+    BHRUsage usage = [self usage:host];
+    if (usage == BHRUsageUnknown) {
+        return NO;
+    }
+    
     BHRouter *router = [self routerForScheme:scheme];
     
     NSArray<NSString *> *pathComponents = URL.pathComponents;
@@ -143,38 +169,70 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
     __block BOOL flag = YES;
     
     [pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSArray<NSString *> * pathSubs = [obj componentsSeparatedByString:BHRViewControlerPathSubPattern];
-        if (!pathSubs.count) {
+        NSArray<NSString *> * subPaths = [obj componentsSeparatedByString:BHRURLSubPathSplitPattern];
+        if (!subPaths.count) {
             flag = NO;
             *stop = NO;
-        } else {
-            NSString *pathComponentKey = pathSubs.firstObject;
-            if (!router.pathComponentByKey[pathComponentKey]) {
-                Class mClass = NSClassFromString(pathComponentKey);
-                if (!mClass) {
+            return;
+        }
+        NSString *pathComponentKey = subPaths.firstObject;
+        if (router.pathComponentByKey[pathComponentKey]) {
+            return;
+        }
+        Class mClass = NSClassFromString(pathComponentKey);
+        if (!mClass) {
+            flag = NO;
+            *stop = NO;
+            return;
+        }
+        switch (usage) {
+            case BHRUsageCallService: {
+                if (subPaths.count < 3) {
                     flag = NO;
                     *stop = NO;
-                } else {
-                    if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
-                        NSArray<NSString *> *pathSubs = [obj componentsSeparatedByString:BHRViewControlerPathSubPattern];
-                        if (pathSubs.count < 2) {
-                            flag = NO;
-                            *stop = NO;
-                        } else {
-                            NSString *protocolStr = pathSubs[1];
-                            Protocol *protocol = NSProtocolFromString(protocolStr);
-                            if (!protocol) {
-                                flag = NO;
-                                *stop = NO;
-                            }
-                        }
-                        
-                    }
+                    return;
                 }
-            }
+                NSString *protocolStr = subPaths[1];
+                NSString *selectorStr = subPaths[2];
+                Protocol *protocol = NSProtocolFromString(protocolStr);
+                SEL selector = NSSelectorFromString(selectorStr);
+                if (!protocol ||
+                    !selector ||
+                    ![mClass conformsToProtocol:@protocol(BHServiceProtocol)] ||
+                    ![mClass conformsToProtocol:protocol] ||
+                    ![mClass respondsToSelector:selector]) {
+                    flag = NO;
+                    *stop = NO;
+                    return;
+                }
+            } break;
+            case BHRUsageJumpViewControler: {
+                if (![mClass isKindOfClass:[UIViewController class]]) {
+                    flag = NO;
+                    *stop = NO;
+                    return;
+                }
+            } break;
+            case BHRUsageRegister: {
+                if (![mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
+                    return;
+                }
+                if (subPaths.count < 2) {
+                    flag = NO;
+                    *stop = NO;
+                    return;
+                }
+                NSString *protocolStr = subPaths[1];
+                Protocol *protocol = NSProtocolFromString(protocolStr);
+                if (!protocol || ![mClass conformsToProtocol:protocol]) {
+                    flag = NO;
+                    *stop = NO;
+                }
+            } break;
+                
+            default:
+                break;
         }
-        
-        
     }];
     
     return flag;
@@ -190,36 +248,36 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
 }
 + (BOOL)openURL:(NSURL *)URL
      withParams:(NSDictionary<NSString *, NSDictionary<NSString *, id> *> *)params
-        andThen:(void(^)(NSURL *URL))then
+        andThen:(void(^)(NSString *pathComponentKey, id obj, id returnValue))then
 {
     if (![self canOpenURL:URL]) {
         return NO;
     }
     
     NSString *scheme = URL.scheme;
+    BHRouter *router = [self routerForScheme:scheme];
+    
+    NSString *host = URL.host;
+    BHRUsage usage = [self usage:host];
+    
     BHRViewControlerEnterMode defaultMode = BHRViewControlerEnterModePush;
     if (URL.fragment.length) {
         defaultMode = [self viewControllerEnterMode:URL.fragment];
     }
-    BHRouter *router = [self routerForScheme:scheme];
+    
     
     NSDictionary<NSString *, NSString *> *queryDic = [self queryDicFromURL:URL];
     NSString *paramsJson = [queryDic objectForKey:BHRURLQueryParamsKey];
     NSDictionary<NSString *, NSDictionary<NSString *, id> *> *allURLParams = [self paramsFromJson:paramsJson];
     
     NSArray<NSString *> *pathComponents = URL.pathComponents;
+    
     [pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (![obj isEqualToString:@"/"]) {
-            NSArray<NSString *> * pathSubs = [obj componentsSeparatedByString:BHRViewControlerPathSubPattern];
-            NSString *pathComponentKey = pathSubs.firstObject;
-            BHRViewControlerEnterMode enterMode = defaultMode;
-            NSString *protocolStr;
-            if (pathSubs.count >= 2) {
-                protocolStr = pathSubs[1];
-            }
-            if (pathSubs.count >= 3) {
-                enterMode = [self viewControllerEnterMode:pathSubs[2]];
-            }
+            
+            NSArray<NSString *> * subPaths = [obj componentsSeparatedByString:BHRURLSubPathSplitPattern];
+            NSString *pathComponentKey = subPaths.firstObject;
+            
             Class mClass;
             BHRPathComponentCustomHandler handler;
             BHRPathComponent *pathComponent = [router.pathComponentByKey objectForKey:pathComponentKey];
@@ -232,35 +290,87 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
             
             NSDictionary<NSString *, id> *URLParams = [allURLParams objectForKey:pathComponentKey];
             NSDictionary<NSString *, id> *funcParams = [params objectForKey:pathComponentKey];
-            NSDictionary<NSString *, id> *finalParams = [self solveURLParams:URLParams withFuncParams:funcParams forClass:mClass];
+            NSDictionary<NSString *, id> *finalParams = [self solveURLParams:URLParams withFuncParams:funcParams forClass:usage == BHRUsageCallService ? nil : mClass];
             
             if (handler) {
                 handler(finalParams);
-            } else {
-                id obj;
-                Protocol *protocol = NSProtocolFromString(protocolStr);
-                if ([mClass conformsToProtocol:@protocol(BHModuleProtocol)]) {
-                    [[BHModuleManager sharedManager] registerDynamicModule:mClass];
-                } else if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
-                    [[BHServiceManager sharedManager] registerService:protocol implClass:mClass];
-                }
-                if ([mClass isKindOfClass:[UIViewController class]]) {
-                    obj = [[BHServiceManager sharedManager] createService:protocol];
-                    [self setObject:obj withPropertys:finalParams];
-                    BOOL isLast = NO;
-                    if (idx == pathComponents.count - 1) {
-                        isLast = YES;
-                    }
-                    [self solveJumpWithViewController:(UIViewController *)obj andJumpMode:enterMode shouldAnimate:isLast];
-                }
+                return;
             }
+            
+            NSString *protocolStr;
+            if (subPaths.count >= 2) {
+                protocolStr = subPaths[1];
+            }
+            Protocol *protocol = NSProtocolFromString(protocolStr);
+            
+            id obj;
+            id returnValue;
+            
+            switch (usage) {
+                case BHRUsageCallService: {
+                    NSString *selectorStr = subPaths[2];
+                    SEL selector = NSSelectorFromString(selectorStr);
+                    obj = [[BHServiceManager sharedManager] createService:protocol];
+                    returnValue = [self safePerformAction:selector forTarget:obj withParams:finalParams];
+                } break;
+                case BHRUsageJumpViewControler: {
+                    BHRViewControlerEnterMode enterMode = defaultMode;
+                    if (subPaths.count >= 3) {
+                        enterMode = [self viewControllerEnterMode:subPaths[2]];
+                    }
+                    
+                    if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
+                        obj = [[BHServiceManager sharedManager] createService:protocol];
+                    } else {
+                        obj = [[mClass alloc] init];
+                    }
+                    [obj setObject:obj forKey:finalParams];
+                    BOOL isLast = pathComponents.count - 1 ? YES : NO;
+                    [self solveJumpWithViewController:(UIViewController *)obj andJumpMode:enterMode shouldAnimate:isLast];
+                } break;
+                case BHRUsageRegister: {
+                    if ([mClass conformsToProtocol:@protocol(BHModuleProtocol)]) {
+                        [[BHModuleManager sharedManager] registerDynamicModule:mClass];
+                    } else if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
+                        [[BHServiceManager sharedManager] registerService:protocol implClass:mClass];
+                    }
+                } break;
+                    
+                default:
+                    break;
+            }
+            !then?:then(pathComponentKey, obj, returnValue);
         }
     }];
-    !then?:then(URL);
+    
     return YES;
 }
 
 #pragma mark - private
++ (BHRUsage)usage:(NSString *)usagePattern
+{
+    usagePattern = usagePattern.lowercaseString;
+    if ([usagePattern isEqualToString:BHRURLHostCallService]) {
+        return BHRUsageCallService;
+    } else if ([usagePattern isEqualToString:BHRURLHostJumpViewController]) {
+        return BHRUsageJumpViewControler;
+    } else if ([usagePattern isEqualToString:BHRURLHostRegister]) {
+        return BHRUsageRegister;
+    }
+    return BHRUsageUnknown;
+}
+
++ (BHRViewControlerEnterMode)viewControllerEnterMode:(NSString *)enterModePattern
+{
+    enterModePattern = enterModePattern.lowercaseString;
+    if ([enterModePattern isEqualToString:BHRURLFragmentViewControlerEnterModePush]) {
+        return BHRViewControlerEnterModePush;
+    } else if ([enterModePattern isEqualToString:BHRURLFragmentViewControlerEnterModeModal]) {
+        return BHRViewControlerEnterModeModal;
+    }
+    return BHRViewControlerEnterModePush;
+}
+
 + (UIViewController *)currentViewController
 {
     UIViewController *viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -283,17 +393,6 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
         }
     }
     return viewController;
-}
-
-+ (BHRViewControlerEnterMode)viewControllerEnterMode:(NSString *)enterModePattern
-{
-    enterModePattern = enterModePattern.lowercaseString;
-    if ([enterModePattern isEqualToString:BHRViewControlerEnterModePatternPush]) {
-        return BHRViewControlerEnterModePush;
-    } else if ([enterModePattern isEqualToString:BHRViewControlerEnterModePatternModal]) {
-        return BHRViewControlerEnterModeModal;
-    }
-    return BHRViewControlerEnterModePush;
 }
 
 + (NSDictionary<NSString *, id> *)queryDicFromURL:(NSURL *)URL
@@ -353,26 +452,28 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
     [funcParamKeys enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [params setObject:funcParams[obj] forKey:obj];
     }];
-    NSArray<NSString *> *paramKeys = params.allKeys;
-    [paramKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        objc_property_t prop = class_getProperty(mClass, obj.UTF8String);
-        if (!prop) {
-            [params removeObjectForKey:obj];
-        } else {
-            NSString *propAttr = [[NSString alloc] initWithCString:property_getAttributes(prop) encoding:NSUTF8StringEncoding];
-            NSRange range = [propAttr rangeOfString:BHRClassRegex options:NSRegularExpressionSearch];
-            if (range.length != 0) {
-                NSString *propClassName = [propAttr substringWithRange:range];
-                Class propClass = objc_getClass([propClassName UTF8String]);
-                if ([propClass isSubclassOfClass:[NSString class]] && [params[obj] isKindOfClass:[NSNumber class]]) {
-                    [params setObject:[NSString stringWithFormat:@"%@", params[obj]] forKey:obj];
-                } else if ([propClass isSubclassOfClass:[NSNumber class]] && [params[obj] isKindOfClass:[NSString class]]) {
-                    [params setObject:@(((NSString *)params[obj]).doubleValue) forKey:obj];
+    if (mClass) {
+        NSArray<NSString *> *paramKeys = params.allKeys;
+        [paramKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            objc_property_t prop = class_getProperty(mClass, obj.UTF8String);
+            if (!prop) {
+                [params removeObjectForKey:obj];
+            } else {
+                NSString *propAttr = [[NSString alloc] initWithCString:property_getAttributes(prop) encoding:NSUTF8StringEncoding];
+                NSRange range = [propAttr rangeOfString:BHRClassRegex options:NSRegularExpressionSearch];
+                if (range.length != 0) {
+                    NSString *propClassName = [propAttr substringWithRange:range];
+                    Class propClass = objc_getClass([propClassName UTF8String]);
+                    if ([propClass isSubclassOfClass:[NSString class]] && [params[obj] isKindOfClass:[NSNumber class]]) {
+                        [params setObject:[NSString stringWithFormat:@"%@", params[obj]] forKey:obj];
+                    } else if ([propClass isSubclassOfClass:[NSNumber class]] && [params[obj] isKindOfClass:[NSString class]]) {
+                        [params setObject:@(((NSString *)params[obj]).doubleValue) forKey:obj];
+                    }
+                    
                 }
-                
             }
-        }
-    }];
+        }];
+    }
     return params;
 }
 
@@ -404,6 +505,58 @@ static NSMutableDictionary<NSString *, BHRouter *> *routerByScheme = nil;
             
         default:
             break;
+    }
+}
+
++ (id)safePerformAction:(SEL)action
+              forTarget:(NSObject *)target
+             withParams:(NSDictionary *)params
+{
+    NSMethodSignature* methodSig = [target methodSignatureForSelector:action];
+    if(methodSig == nil) {
+        return nil;
+    }
+    const char* retType = [methodSig methodReturnType];
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSig];
+    NSArray<NSString *> *keys = params.allKeys;
+    keys = [keys sortedArrayUsingComparator:^NSComparisonResult(NSString *  _Nonnull obj1, NSString *  _Nonnull obj2) {
+        if (obj1.integerValue < obj2.integerValue) {
+            return NSOrderedAscending;
+        } else if (obj1.integerValue == obj2.integerValue) {
+            return NSOrderedSame;
+        } else {
+            return NSOrderedDescending;
+        }
+    }];
+    [keys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        id value = params[obj];
+        [invocation setArgument:&value atIndex:idx+2];
+    }];
+    [invocation setSelector:action];
+    [invocation setTarget:target];
+    [invocation invoke];
+    if (strcmp(retType, @encode(void)) == 0) {
+        return nil;
+    } else if (strcmp(retType, @encode(NSInteger)) == 0) {
+        NSInteger result = 0;
+        [invocation getReturnValue:&result];
+        return @(result);
+    } else if (strcmp(retType, @encode(BOOL)) == 0) {
+        BOOL result = NO;
+        [invocation getReturnValue:&result];
+        return @(result);
+    } else if (strcmp(retType, @encode(CGFloat)) == 0) {
+        CGFloat result = 0;
+        [invocation getReturnValue:&result];
+        return @(result);
+    } else if (strcmp(retType, @encode(NSUInteger)) == 0) {
+        NSUInteger result = 0;
+        [invocation getReturnValue:&result];
+        return @(result);
+    } else {
+        id result = nil;
+        [invocation getReturnValue:&result];
+        return result;
     }
 }
 
