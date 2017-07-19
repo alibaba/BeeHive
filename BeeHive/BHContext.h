@@ -20,7 +20,7 @@ typedef enum
 }BHEnvironmentType;
 
 
-@interface BHContext : NSObject
+@interface BHContext : NSObject <NSCopying>
 
 //global env
 @property(nonatomic, assign) BHEnvironmentType env;
@@ -54,6 +54,9 @@ typedef enum
 
 //user Activity Model
 @property (nonatomic, strong) BHUserActivityItem *userActivityItem;
+
+//custom param
+@property (nonatomic, copy) NSDictionary *customParam;
 
 + (instancetype)shareInstance;
 
