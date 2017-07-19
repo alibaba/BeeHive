@@ -41,7 +41,9 @@ typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *param
         handler:(BHRPathComponentCustomHandler)handler;
 - (void)removePathComponent:(NSString *)pathComponentKey;
 
-//url - >  com.alibaba.beehive://call.service.beehive/pathComponentKey.protocolName.push(modal)/...?params={}(value url encode)#push
+//url - >  com.alibaba.beehive://call.service.beehive/pathComponentKey.protocolName.selector/...?params={}(value url encode)
+//url - >  com.alibaba.beehive://register.beehive/pathComponentKey.protocolName/...?params={}(value url encode)
+//url - >  com.alibaba.beehive://jump.vc.beehive/pathComponentKey.protocolName.push(modal)/...?params={}(value url encode)#push
 //params -> {pathComponentKey:{paramName:paramValue,...},...}
 + (BOOL)canOpenURL:(NSURL *)URL;
 + (BOOL)openURL:(NSURL *)URL;
