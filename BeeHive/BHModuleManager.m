@@ -135,7 +135,13 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 - (void)triggerEvent:(NSInteger)eventType
 {
-    [self handleModuleEvent:eventType];
+    [self triggerEvent:eventType withCustomParam:nil];
+    
+}
+
+- (void)triggerEvent:(NSInteger)eventType
+     withCustomParam:(NSDictionary *)customParam {
+    [self handleModuleEvent:eventType withCustomParam:customParam];
 }
 
 
@@ -331,27 +337,32 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 #pragma mark - module protocol
 - (void)handleModuleEvent:(NSInteger)eventType
+          withCustomParam:(NSDictionary *)customParam
 {
     switch (eventType) {
         case BHMInitEvent:
             //special
-            [self handleModulesInitEvent];
+            [self handleModulesInitEvent:customParam];
             break;
         case BHMTearDownEvent:
             //special
-            [self handleModulesTearDownEvent];
+            [self handleModulesTearDownEvent:customParam];
             break;
         default: {
             NSString *selectorStr = [self.BHSelectorByEvent objectForKey:@(eventType)];
-            [self handleModuleEvent:eventType withSeletorStr:selectorStr];
+            [self handleModuleEvent:eventType withSeletorStr:selectorStr andCustomParam:customParam];
         }
             break;
     }
     
 }
 
-- (void)handleModulesInitEvent
+- (void)handleModulesInitEvent:(NSDictionary *)customParam
 {
+    BHContext *context = [BHContext shareInstance].copy;
+    context.customParam = customParam;
+    context.customEvent = BHMInitEvent;
+    
     NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMInitEvent)];
     
     [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -361,7 +372,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
             __strong typeof(&*self) sself = wself;
             if (sself) {
                 if ([moduleInstance respondsToSelector:@selector(modInit:)]) {
-                    [moduleInstance modInit:[BHContext shareInstance]];
+                    [moduleInstance modInit:context];
                 }
             }
         };
@@ -385,30 +396,36 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     }];
 }
 
-- (void)handleModulesTearDownEvent
+- (void)handleModulesTearDownEvent:(NSDictionary *)customParam
 {
+    BHContext *context = [BHContext shareInstance].copy;
+    context.customParam = customParam;
+    context.customEvent = BHMTearDownEvent;
+    
     NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMTearDownEvent)];
     //Reverse Order to unload
     for (int i = (int)moduleInstances.count - 1; i >= 0; i--) {
         id<BHModuleProtocol> moduleInstance = [moduleInstances objectAtIndex:i];
         if (moduleInstance && [moduleInstance respondsToSelector:@selector(modTearDown:)]) {
-            [moduleInstance modTearDown:[BHContext shareInstance]];
+            [moduleInstance modTearDown:context];
         }
     }
 }
 
-- (void)handleModuleEvent:(NSInteger)eventType withSeletorStr:(NSString *)selectorStr
+- (void)handleModuleEvent:(NSInteger)eventType
+           withSeletorStr:(NSString *)selectorStr
+           andCustomParam:(NSDictionary *)customParam
 {
-    if (eventType >= 1000) {
-        [BHContext shareInstance].customEvent = eventType;
-    }
+    BHContext *context = [BHContext shareInstance].copy;
+    context.customParam = customParam;
+    context.customEvent = eventType;
     SEL seletor = NSSelectorFromString(selectorStr);
     NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(eventType)];
     [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([moduleInstance respondsToSelector:seletor]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            [moduleInstance performSelector:seletor withObject:[BHContext shareInstance]];
+            [moduleInstance performSelector:seletor withObject:context];
 #pragma clang diagnostic pop
             
             [[BHTimeProfiler sharedTimeProfiler] recordEventTime:[NSString stringWithFormat:@"%@ --- %@", [moduleInstance class], NSStringFromSelector(seletor)]];
