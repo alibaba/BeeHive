@@ -298,10 +298,11 @@ static NSString *BHRURLGlobalScheme = nil;
             }
             
             NSString *protocolStr;
+            Protocol *protocol;
             if (subPaths.count >= 2) {
                 protocolStr = subPaths[1];
+                protocol = NSProtocolFromString(protocolStr);
             }
-            Protocol *protocol = NSProtocolFromString(protocolStr);
             
             id obj;
             id returnValue;
@@ -319,7 +320,7 @@ static NSString *BHRURLGlobalScheme = nil;
                         enterMode = [self viewControllerEnterMode:subPaths[2]];
                     }
                     
-                    if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
+                    if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)] && protocol) {
                         obj = [[BHServiceManager sharedManager] createService:protocol];
                     } else {
                         obj = [[mClass alloc] init];
@@ -331,7 +332,7 @@ static NSString *BHRURLGlobalScheme = nil;
                 case BHRUsageRegister: {
                     if ([mClass conformsToProtocol:@protocol(BHModuleProtocol)]) {
                         [[BHModuleManager sharedManager] registerDynamicModule:mClass];
-                    } else if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
+                    } else if ([mClass conformsToProtocol:@protocol(BHServiceProtocol)] && protocol) {
                         [[BHServiceManager sharedManager] registerService:protocol implClass:mClass];
                     }
                 } break;
