@@ -45,7 +45,7 @@ typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *param
 //url - >  com.alibaba.beehive://register.beehive/pathComponentKey.protocolName/...?params={}(value url encode)
 //url - >  com.alibaba.beehive://jump.vc.beehive/pathComponentKey.protocolName.push(modal)/...?params={}(value url encode)#push
 //params -> {pathComponentKey:{paramName:paramValue,...},...}
-//当为调用服务时 prams 中 paramName 为@1,@2,...是参数的顺序
+//when call service， paramName = @1,@2,...(order of paramValue)
 + (BOOL)canOpenURL:(NSURL *)URL;
 + (BOOL)openURL:(NSURL *)URL;
 + (BOOL)openURL:(NSURL *)URL
