@@ -33,7 +33,7 @@ typedef void(^BHRPathComponentCustomHandler)(NSDictionary<NSString *, id> *param
 + (void)unRegisterRouterForScheme:(NSString *)scheme;
 + (void)unRegisterAllRouters;
 
-//handler is a custom module or service init function
+//handler is a custom module or service solve function
 - (void)addPathComponent:(NSString *)pathComponentKey
        forClass:(Class)mClass;
 - (void)addPathComponent:(NSString *)pathComponentKey
