@@ -87,8 +87,13 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 - (void)registerDynamicModule:(Class)moduleClass
 {
-    [self addModuleFromObject:moduleClass];
- 
+    [self registerDynamicModule:moduleClass shouldTriggerInitEvent:NO];
+}
+
+- (void)registerDynamicModule:(Class)moduleClass
+       shouldTriggerInitEvent:(BOOL)shouldTriggerInitEvent
+{
+    [self addModuleFromObject:moduleClass shouldTriggerInitEvent:shouldTriggerInitEvent];
 }
 
 - (void)registedAllModules
@@ -177,6 +182,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 
 - (void)addModuleFromObject:(id)object
+     shouldTriggerInitEvent:(BOOL)shouldTriggerInitEvent
 {
     Class class;
     NSString *moduleName = nil;
@@ -222,11 +228,13 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         }];
         [self registerEventsByModuleInstance:moduleInstance];
         
-        [self handleModuleEvent:BHMSetupEvent forTarget:moduleInstance withSeletorStr:nil andCustomParam:nil];
-        [self handleModulesInitEventForTarget:moduleInstance withCustomParam:nil];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self handleModuleEvent:BHMSplashEvent forTarget:moduleInstance withSeletorStr:nil andCustomParam:nil];
-        });
+        if (shouldTriggerInitEvent) {
+            [self handleModuleEvent:BHMSetupEvent forTarget:moduleInstance withSeletorStr:nil andCustomParam:nil];
+            [self handleModulesInitEventForTarget:moduleInstance withCustomParam:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self handleModuleEvent:BHMSplashEvent forTarget:moduleInstance withSeletorStr:nil andCustomParam:nil];
+            });
+        }
     }
 }
 
