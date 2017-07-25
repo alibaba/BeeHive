@@ -141,7 +141,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 - (void)triggerEvent:(NSInteger)eventType
      withCustomParam:(NSDictionary *)customParam {
-    [self handleModuleEvent:eventType withCustomParam:customParam];
+    [self handleModuleEvent:eventType forTarget:nil withCustomParam:customParam];
 }
 
 
@@ -232,6 +232,12 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
             return [module1Level intValue] > [module2Level intValue];
         }];
         [self registerEventsByModuleInstance:moduleInstance];
+        
+        [self handleModuleEvent:BHMSetupEvent forTarget:moduleInstance withSeletorStr:nil andCustomParam:nil];
+        [self handleModulesInitEventForTarget:moduleInstance withCustomParam:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self handleModuleEvent:BHMSplashEvent forTarget:moduleInstance withSeletorStr:nil andCustomParam:nil];
+        });
     }
 }
 
@@ -337,33 +343,40 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 #pragma mark - module protocol
 - (void)handleModuleEvent:(NSInteger)eventType
+                forTarget:(id<BHModuleProtocol>)target
           withCustomParam:(NSDictionary *)customParam
 {
     switch (eventType) {
         case BHMInitEvent:
             //special
-            [self handleModulesInitEvent:customParam];
+            [self handleModulesInitEventForTarget:nil withCustomParam :customParam];
             break;
         case BHMTearDownEvent:
             //special
-            [self handleModulesTearDownEvent:customParam];
+            [self handleModulesTearDownEventForTarget:nil withCustomParam:customParam];
             break;
         default: {
             NSString *selectorStr = [self.BHSelectorByEvent objectForKey:@(eventType)];
-            [self handleModuleEvent:eventType withSeletorStr:selectorStr andCustomParam:customParam];
+            [self handleModuleEvent:eventType forTarget:nil withSeletorStr:selectorStr andCustomParam:customParam];
         }
             break;
     }
     
 }
 
-- (void)handleModulesInitEvent:(NSDictionary *)customParam
+- (void)handleModulesInitEventForTarget:(id<BHModuleProtocol>)target
+                        withCustomParam:(NSDictionary *)customParam
 {
     BHContext *context = [BHContext shareInstance].copy;
     context.customParam = customParam;
     context.customEvent = BHMInitEvent;
     
-    NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMInitEvent)];
+    NSArray<id<BHModuleProtocol>> *moduleInstances;
+    if (target) {
+        moduleInstances = @[target];
+    } else {
+        moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMInitEvent)];
+    }
     
     [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         __weak typeof(&*self) wself = self;
@@ -396,13 +409,20 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     }];
 }
 
-- (void)handleModulesTearDownEvent:(NSDictionary *)customParam
+- (void)handleModulesTearDownEventForTarget:(id<BHModuleProtocol>)target
+                            withCustomParam:(NSDictionary *)customParam
 {
     BHContext *context = [BHContext shareInstance].copy;
     context.customParam = customParam;
     context.customEvent = BHMTearDownEvent;
     
-    NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMTearDownEvent)];
+    NSArray<id<BHModuleProtocol>> *moduleInstances;
+    if (target) {
+        moduleInstances = @[target];
+    } else {
+        moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMTearDownEvent)];
+    }
+
     //Reverse Order to unload
     for (int i = (int)moduleInstances.count - 1; i >= 0; i--) {
         id<BHModuleProtocol> moduleInstance = [moduleInstances objectAtIndex:i];
@@ -413,14 +433,27 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 }
 
 - (void)handleModuleEvent:(NSInteger)eventType
+                forTarget:(id<BHModuleProtocol>)target
            withSeletorStr:(NSString *)selectorStr
            andCustomParam:(NSDictionary *)customParam
 {
     BHContext *context = [BHContext shareInstance].copy;
     context.customParam = customParam;
     context.customEvent = eventType;
+    if (!selectorStr.length) {
+        selectorStr = [self.BHSelectorByEvent objectForKey:@(eventType)];
+    }
     SEL seletor = NSSelectorFromString(selectorStr);
-    NSArray<id<BHModuleProtocol>> *moduleInstances = [self.BHModulesByEvent objectForKey:@(eventType)];
+    if (!seletor) {
+        selectorStr = [self.BHSelectorByEvent objectForKey:@(eventType)];
+        seletor = NSSelectorFromString(selectorStr);
+    }
+    NSArray<id<BHModuleProtocol>> *moduleInstances;
+    if (target) {
+        moduleInstances = @[target];
+    } else {
+        moduleInstances = [self.BHModulesByEvent objectForKey:@(eventType)];
+    }
     [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([moduleInstance respondsToSelector:seletor]) {
 #pragma clang diagnostic push
