@@ -194,6 +194,17 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         return ;
     }
     
+    __block BOOL flag = YES;
+    [self.BHModules enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:class]) {
+            flag = NO;
+            *stop = YES;
+        }
+    }];
+    if (!flag) {
+        return;
+    }
+    
     if ([class conformsToProtocol:@protocol(BHModuleProtocol)]) {
         NSMutableDictionary *moduleInfo = [NSMutableDictionary dictionary];
         

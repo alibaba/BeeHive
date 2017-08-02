@@ -59,12 +59,18 @@ static const NSString *kImpl = @"impl";
     NSParameterAssert(service != nil);
     NSParameterAssert(implClass != nil);
     
-    if (![implClass conformsToProtocol:service] && self.enableException) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ module does not comply with %@ protocol", NSStringFromClass(implClass), NSStringFromProtocol(service)] userInfo:nil];
+    if (![implClass conformsToProtocol:service]) {
+        if (self.enableException) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ module does not comply with %@ protocol", NSStringFromClass(implClass), NSStringFromProtocol(service)] userInfo:nil];
+        }
+        return;
     }
     
-    if ([self checkValidService:service] && self.enableException) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ protocol has been registed", NSStringFromProtocol(service)] userInfo:nil];
+    if ([self checkValidService:service]) {
+        if (self.enableException) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ protocol has been registed", NSStringFromProtocol(service)] userInfo:nil];
+        }
+        return;
     }
     
     NSString *key = NSStringFromProtocol(service);
@@ -82,8 +88,11 @@ static const NSString *kImpl = @"impl";
 {
     id implInstance = nil;
     
-    if (![self checkValidService:service] && self.enableException) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ protocol does not been registed", NSStringFromProtocol(service)] userInfo:nil];
+    if (![self checkValidService:service]) {
+        if (self.enableException) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:[NSString stringWithFormat:@"%@ protocol does not been registed", NSStringFromProtocol(service)] userInfo:nil];
+        }
+        
     }
     
     NSString *serviceStr = NSStringFromProtocol(service);
