@@ -53,11 +53,23 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 // If you do not comply with set Level protocol, the default Normal
 - (void)registerDynamicModule:(Class)moduleClass;
 
+- (void)registerDynamicModule:(Class)moduleClass
+       shouldTriggerInitEvent:(BOOL)shouldTriggerInitEvent;
+
 - (void)loadLocalModules;
 
 - (void)registedAllModules;
 
-- (void)triggerEvent:(BHModuleEventType)eventType;
+- (void)registerCustomEvent:(NSInteger)eventType
+         withModuleInstance:(id)moduleInstance
+             andSelectorStr:(NSString *)selectorStr;
+
+- (void)triggerEvent:(NSInteger)eventType;
+
+- (void)triggerEvent:(NSInteger)eventType
+     withCustomParam:(NSDictionary *)customParam;
+
+
 
 @end
 
