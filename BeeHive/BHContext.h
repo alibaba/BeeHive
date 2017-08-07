@@ -62,6 +62,8 @@ typedef enum
 
 - (void)addServiceWithImplInstance:(id)implInstance serviceName:(NSString *)serviceName;
 
+- (void)removeServiceWithServiceName:(NSString *)serviceName;
+
 - (id)getServiceInstanceFromServiceName:(NSString *)serviceName;
 
 @end
