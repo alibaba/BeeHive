@@ -96,6 +96,35 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     [self addModuleFromObject:moduleClass shouldTriggerInitEvent:shouldTriggerInitEvent];
 }
 
+- (void)unRegisterDynamicModule:(Class)moduleClass {
+    if (!moduleClass) {
+        return;
+    }
+    [self.BHModuleInfos filterUsingPredicate:[NSPredicate predicateWithFormat:@"%@!=%@", kModuleInfoNameKey, NSStringFromClass(moduleClass)]];
+    __block NSInteger index = -1;
+    [self.BHModules enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:moduleClass]) {
+            index = idx;
+            *stop = YES;
+        }
+    }];
+    if (index >= 0) {
+        [self.BHModules removeObjectAtIndex:index];
+    }
+    [self.BHModulesByEvent enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSMutableArray<id<BHModuleProtocol>> * _Nonnull obj, BOOL * _Nonnull stop) {
+        __block NSInteger index = -1;
+        [obj enumerateObjectsUsingBlock:^(id<BHModuleProtocol>  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:moduleClass]) {
+                index = idx;
+                *stop = NO;
+            }
+        }];
+        if (index >= 0) {
+            [obj removeObjectAtIndex:index];
+        }
+    }];
+}
+
 - (void)registedAllModules
 {
 
