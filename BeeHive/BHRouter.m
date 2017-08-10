@@ -17,6 +17,84 @@
 #import "BHModuleManager.h"
 #import "BHServiceManager.h"
 
+@interface NSObject (BHRetType)
+
++ (id)bh_getReturnFromInv:(NSInvocation *)inv withSig:(NSMethodSignature *)sig;
+
+@end
+
+@implementation NSObject (BHRetType)
+
++ (id)bh_getReturnFromInv:(NSInvocation *)inv withSig:(NSMethodSignature *)sig {
+    NSUInteger length = [sig methodReturnLength];
+    if (length == 0) return nil;
+    
+    char *type = (char *)[sig methodReturnType];
+    while (*type == 'r' || // const
+           *type == 'n' || // in
+           *type == 'N' || // inout
+           *type == 'o' || // out
+           *type == 'O' || // bycopy
+           *type == 'R' || // byref
+           *type == 'V') { // oneway
+        type++; // cutoff useless prefix
+    }
+    
+#define return_with_number(_type_) \
+do { \
+_type_ ret; \
+[inv getReturnValue:&ret]; \
+return @(ret); \
+} while (0)
+    
+    switch (*type) {
+        case 'v': return nil; // void
+        case 'B': return_with_number(bool);
+        case 'c': return_with_number(char);
+        case 'C': return_with_number(unsigned char);
+        case 's': return_with_number(short);
+        case 'S': return_with_number(unsigned short);
+        case 'i': return_with_number(int);
+        case 'I': return_with_number(unsigned int);
+        case 'l': return_with_number(int);
+        case 'L': return_with_number(unsigned int);
+        case 'q': return_with_number(long long);
+        case 'Q': return_with_number(unsigned long long);
+        case 'f': return_with_number(float);
+        case 'd': return_with_number(double);
+        case 'D': { // long double
+            long double ret;
+            [inv getReturnValue:&ret];
+            return [NSNumber numberWithDouble:ret];
+        };
+            
+        case '@': { // id
+            id ret = nil;
+            [inv getReturnValue:&ret];
+            return ret;
+        };
+            
+        case '#': { // Class
+            Class ret = nil;
+            [inv getReturnValue:&ret];
+            return ret;
+        };
+            
+        default: { // struct / union / SEL / void* / unknown
+            const char *objCType = [sig methodReturnType];
+            char *buf = calloc(1, length);
+            if (!buf) return nil;
+            [inv getReturnValue:buf];
+            NSValue *value = [NSValue valueWithBytes:buf objCType:objCType];
+            free(buf);
+            return value;
+        };
+    }
+#undef return_with_number
+}
+
+@end
+
 static NSString *const BHRClassRegex = @"(?<=T@\")(.*)(?=\",)";
 
 typedef NS_ENUM(NSUInteger, BHRViewControlerEnterMode) {
@@ -513,12 +591,12 @@ static NSString *BHRURLGlobalScheme = nil;
               forTarget:(NSObject *)target
              withParams:(NSDictionary *)params
 {
-    NSMethodSignature* methodSig = [target methodSignatureForSelector:action];
-    if(methodSig == nil) {
-        return nil;
-    }
-    const char* retType = [methodSig methodReturnType];
-    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSig];
+    NSMethodSignature * sig = [self methodSignatureForSelector:action];
+    if (!sig) { return nil; }
+    NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+    if (!inv) { return nil; }
+    [inv setTarget:target];
+    [inv setSelector:action];
     NSArray<NSString *> *keys = params.allKeys;
     keys = [keys sortedArrayUsingComparator:^NSComparisonResult(NSString *  _Nonnull obj1, NSString *  _Nonnull obj2) {
         if (obj1.integerValue < obj2.integerValue) {
@@ -531,34 +609,12 @@ static NSString *BHRURLGlobalScheme = nil;
     }];
     [keys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         id value = params[obj];
-        [invocation setArgument:&value atIndex:idx+2];
+        [inv setArgument:&value atIndex:idx+2];
     }];
-    [invocation setSelector:action];
-    [invocation setTarget:target];
-    [invocation invoke];
-    if (strcmp(retType, @encode(void)) == 0) {
-        return nil;
-    } else if (strcmp(retType, @encode(NSInteger)) == 0) {
-        NSInteger result = 0;
-        [invocation getReturnValue:&result];
-        return @(result);
-    } else if (strcmp(retType, @encode(BOOL)) == 0) {
-        BOOL result = NO;
-        [invocation getReturnValue:&result];
-        return @(result);
-    } else if (strcmp(retType, @encode(CGFloat)) == 0) {
-        CGFloat result = 0;
-        [invocation getReturnValue:&result];
-        return @(result);
-    } else if (strcmp(retType, @encode(NSUInteger)) == 0) {
-        NSUInteger result = 0;
-        [invocation getReturnValue:&result];
-        return @(result);
-    } else {
-        id result = nil;
-        [invocation getReturnValue:&result];
-        return result;
-    }
+    [inv invoke];
+    return [NSObject bh_getReturnFromInv:inv withSig:sig];
 }
 
 @end
+
+
