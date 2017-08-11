@@ -279,9 +279,27 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         [self.BHModulesByEvent setObject:@[].mutableCopy forKey:eventTypeNumber];
     }
     NSMutableArray *eventModules = [self.BHModulesByEvent objectForKey:eventTypeNumber];
-    if (![eventModules containsObject:moduleInstance]) {
+    if (![self eventModules:eventModules contain:moduleInstance]) {
         [eventModules addObject:moduleInstance];
     }
+}
+/**
+ *  判断是否已包含moduleInstance
+ *
+ *  @param eventModules   已初始化模块
+ *  @param moduleInstance 模块实例
+ *
+ *  @return true 包含 false 没有包含
+ */
+- (BOOL)eventModules:(NSArray *)eventModules contain:(id<BHModuleProtocol>)moduleInstance{
+    
+    BOOL isContain = false;
+    for (id instance in eventModules) {
+        if([NSStringFromClass([instance class]) isEqualToString:NSStringFromClass([moduleInstance class])]){
+            return true;
+        }
+    }
+    return isContain;
 }
 
 #pragma mark - property setter or getter
