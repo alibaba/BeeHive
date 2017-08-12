@@ -56,6 +56,8 @@ typedef NS_ENUM(NSInteger, BHModuleEventType)
 - (void)registerDynamicModule:(Class)moduleClass
        shouldTriggerInitEvent:(BOOL)shouldTriggerInitEvent;
 
+- (void)unRegisterDynamicModule:(Class)moduleClass;
+
 - (void)loadLocalModules;
 
 - (void)registedAllModules;
