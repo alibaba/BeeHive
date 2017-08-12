@@ -38,6 +38,11 @@
     [[BHContext shareInstance].servicesByName setObject:implInstance forKey:serviceName];
 }
 
+- (void)removeServiceWithServiceName:(NSString *)serviceName
+{
+    [[BHContext shareInstance].servicesByName removeObjectForKey:serviceName];
+}
+
 - (id)getServiceInstanceFromServiceName:(NSString *)serviceName
 {
     return [[BHContext shareInstance].servicesByName objectForKey:serviceName];
