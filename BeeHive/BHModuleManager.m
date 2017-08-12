@@ -15,6 +15,7 @@
 #define kModuleArrayKey     @"moduleClasses"
 #define kModuleInfoNameKey  @"moduleClass"
 #define kModuleInfoLevelKey @"moduleLevel"
+#define kModuleInfoPriorityKey @"modulePriority"
 
 static  NSString *kSetupSelector = @"modSetUp:";
 static  NSString *kInitSelector = @"modInit:";
@@ -129,10 +130,15 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 {
 
     [self.BHModuleInfos sortUsingComparator:^NSComparisonResult(NSDictionary *module1, NSDictionary *module2) {
-      NSNumber *module1Level = (NSNumber *)[module1 objectForKey:kModuleInfoLevelKey];
-      NSNumber *module2Level =  (NSNumber *)[module2 objectForKey:kModuleInfoLevelKey];
-        
-        return [module1Level intValue] > [module2Level intValue];
+        NSNumber *module1Level = (NSNumber *)[module1 objectForKey:kModuleInfoLevelKey];
+        NSNumber *module2Level =  (NSNumber *)[module2 objectForKey:kModuleInfoLevelKey];
+        if (module1Level.integerValue != module2Level.integerValue) {
+            return module1Level.integerValue > module2Level.integerValue;
+        } else {
+            NSNumber *module1Priority = (NSNumber *)[module1 objectForKey:kModuleInfoPriorityKey];
+            NSNumber *module2Priority = (NSNumber *)[module2 objectForKey:kModuleInfoPriorityKey];
+            return module1Priority.integerValue < module2Priority.integerValue;
+        }
     }];
     
     NSMutableArray *tmpArray = [NSMutableArray array];
@@ -263,8 +269,19 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
             if ([moduleInstance2 respondsToSelector:@selector(basicModuleLevel)]) {
                 module2Level = @(BHModuleBasic);
             }
-            
-            return [module1Level intValue] > [module2Level intValue];
+            if (module1Level.integerValue != module2Level.integerValue) {
+                return module1Level.integerValue > module2Level.integerValue;
+            } else {
+                NSInteger module1Priority = 0;
+                NSInteger module2Priority = 0;
+                if ([moduleInstance1 respondsToSelector:@selector(modulePriority)]) {
+                    module1Priority = [moduleInstance1 modulePriority];
+                }
+                if ([moduleInstance2 respondsToSelector:@selector(modulePriority)]) {
+                    module2Priority = [moduleInstance2 modulePriority];
+                }
+                return module1Priority < module2Priority;
+            }
         }];
         [self registerEventsByModuleInstance:moduleInstance];
         

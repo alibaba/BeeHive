@@ -11,12 +11,16 @@
 			<string>HomeModule</string>
 			<key>moduleLevel</key>
 			<integer>1</integer>
+			<key>modulePriority</key>
+			<string>600</string>
 		</dict>
 		<dict>
 			<key>moduleClass</key>
 			<string>TMTradeAdapter</string>
 			<key>moduleLevel</key>
 			<integer>1</integer>
+			<key>modulePriority</key>
+			<string>599</string>
 		</dict>
 	</array>
 </dict>
