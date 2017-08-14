@@ -84,6 +84,7 @@
 {
     [[BeeHive shareInstance].context.openURLItem setOpenURL:url];
     [[BeeHive shareInstance].context.openURLItem setSourceApplication:sourceApplication];
+    [[BeeHive shareInstance].context.openURLItem setAnnotation:annotation];
     [[BHModuleManager sharedManager] triggerEvent:BHMOpenURLEvent];
     return YES;
 }
