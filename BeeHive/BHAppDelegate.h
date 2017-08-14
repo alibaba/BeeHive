@@ -44,6 +44,7 @@ typedef void (^BHNotificationCompletionHandler)();
 
 @property (nonatomic, strong) NSURL *openURL;
 @property (nonatomic, strong) NSString *sourceApplication;
+@property (nonatomic, strong) id annotation;
 @property (nonatomic, strong) NSDictionary *options;
 
 @end
