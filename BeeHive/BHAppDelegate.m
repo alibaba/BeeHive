@@ -18,7 +18,7 @@
 #endif
 
 
-@interface BHAppDelegate ()
+@interface BHAppDelegate () <UNUserNotificationCenterDelegate>
 
 @end
 
@@ -29,13 +29,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
     [[BHModuleManager sharedManager] triggerEvent:BHMSetupEvent];
     [[BHModuleManager sharedManager] triggerEvent:BHMInitEvent];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[BHModuleManager sharedManager] triggerEvent:BHMSplashEvent];
     });
+    
+    [UNUserNotificationCenter currentNotificationCenter].delegate = self;
     
 #ifdef DEBUG
     [[BHTimeProfiler sharedTimeProfiler] saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
