@@ -75,5 +75,7 @@
 
 - (void)modDidUpdateContinueUserActivity:(BHContext *)context;
 
+- (void)modHandleWatchKitExtensionRequest:(BHContext *)context;
+
 - (void)modDidCustomEvent:(BHContext *)context;
 @end

@@ -41,6 +41,7 @@ static  NSString *kWillContinueUserActivitySelector = @"modWillContinueUserActiv
 static  NSString *kContinueUserActivitySelector = @"modContinueUserActivity:";
 static  NSString *kDidUpdateContinueUserActivitySelector = @"modDidUpdateContinueUserActivity:";
 static  NSString *kFailToContinueUserActivitySelector = @"modDidFailToContinueUserActivity:";
+static  NSString *kHandleWatchKitExtensionRequestSelector = @"modHandleWatchKitExtensionRequest:";
 static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 
 
@@ -420,6 +421,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
                                @(BHMDidUpdateUserActivityEvent):kDidUpdateContinueUserActivitySelector,
                                
                                @(BHMQuickActionEvent):kQuickActionSelector,
+                               @(BHMHandleWatchKitExtensionRequestEvent):kHandleWatchKitExtensionRequestSelector,
                                @(BHMDidCustomEvent):kAppCustomSelector,
                                }.mutableCopy;
     }
