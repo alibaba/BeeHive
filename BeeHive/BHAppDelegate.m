@@ -36,7 +36,9 @@
         [[BHModuleManager sharedManager] triggerEvent:BHMSplashEvent];
     });
     
-    [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0f) {
+        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+    }
     
 #ifdef DEBUG
     [[BHTimeProfiler sharedTimeProfiler] saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
