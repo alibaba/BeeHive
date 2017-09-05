@@ -35,10 +35,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[BHModuleManager sharedManager] triggerEvent:BHMSplashEvent];
     });
-    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
     if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0f) {
         [UNUserNotificationCenter currentNotificationCenter].delegate = self;
     }
+#endif
     
 #ifdef DEBUG
     [[BHTimeProfiler sharedTimeProfiler] saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
