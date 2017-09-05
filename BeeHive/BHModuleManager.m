@@ -167,7 +167,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
 //    [self.BHModules removeAllObjects];
 
     [self.BHModules addObjectsFromArray:tmpArray];
-    [self.BHModulesByEvent removeAllObjects];
+    
     [self registerAllSystemEvents];
 }
 
