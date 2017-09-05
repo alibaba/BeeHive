@@ -16,6 +16,7 @@
 #define kModuleInfoNameKey  @"moduleClass"
 #define kModuleInfoLevelKey @"moduleLevel"
 #define kModuleInfoPriorityKey @"modulePriority"
+#define kModuleInfoHasInstantiatedKey @"moduleHasInstantiated"
 
 static  NSString *kSetupSelector = @"modSetUp:";
 static  NSString *kInitSelector = @"modInit:";
@@ -80,10 +81,16 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     
     NSDictionary *moduleList = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
     
-    NSArray *modulesArray = [moduleList objectForKey:kModuleArrayKey];
-    
-    [self.BHModuleInfos addObjectsFromArray:modulesArray];
-    
+    NSArray<NSDictionary *> *modulesArray = [moduleList objectForKey:kModuleArrayKey];
+    NSMutableDictionary<NSString *, NSNumber *> *moduleInfoByClass = @{}.mutableCopy;
+    [self.BHModuleInfos enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [moduleInfoByClass setObject:@1 forKey:[obj objectForKey:kModuleInfoNameKey]];
+    }];
+    [modulesArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (!moduleInfoByClass[[obj objectForKey:kModuleInfoNameKey]]) {
+            [self.BHModuleInfos addObject:obj];
+        }
+    }];
 }
 
 - (void)registerDynamicModule:(Class)moduleClass
@@ -149,15 +156,15 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         NSString *classStr = [module objectForKey:kModuleInfoNameKey];
         
         Class moduleClass = NSClassFromString(classStr);
-        
-        if (NSStringFromClass(moduleClass)) {
+        BOOL hasInstantiated = ((NSNumber *)[module objectForKey:kModuleInfoHasInstantiatedKey]).boolValue;
+        if (NSStringFromClass(moduleClass) && !hasInstantiated) {
             id<BHModuleProtocol> moduleInstance = [[moduleClass alloc] init];
             [tmpArray addObject:moduleInstance];
         }
         
     }];
     
-    [self.BHModules removeAllObjects];
+//    [self.BHModules removeAllObjects];
 
     [self.BHModules addObjectsFromArray:tmpArray];
     
@@ -260,6 +267,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         
         id<BHModuleProtocol> moduleInstance = [[class alloc] init];
         [self.BHModules addObject:moduleInstance];
+        [moduleInfo setObject:@(YES) forKey:kModuleInfoHasInstantiatedKey];
         [self.BHModules sortUsingComparator:^NSComparisonResult(id<BHModuleProtocol> moduleInstance1, id<BHModuleProtocol> moduleInstance2) {
             NSNumber *module1Level = @(BHModuleNormal);
             NSNumber *module2Level = @(BHModuleNormal);
@@ -318,15 +326,38 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         return;
     }
     NSNumber *eventTypeNumber = @(eventType);
-    if (![self.BHSelectorByEvent.allKeys containsObject:eventTypeNumber]) {
+    if (!self.BHSelectorByEvent[eventTypeNumber]) {
         [self.BHSelectorByEvent setObject:selectorStr forKey:eventTypeNumber];
     }
-    if (![self.BHModulesByEvent.allKeys containsObject:eventTypeNumber]) {
+    if (!self.BHModulesByEvent[eventTypeNumber]) {
         [self.BHModulesByEvent setObject:@[].mutableCopy forKey:eventTypeNumber];
     }
     NSMutableArray *eventModules = [self.BHModulesByEvent objectForKey:eventTypeNumber];
     if (![eventModules containsObject:moduleInstance]) {
         [eventModules addObject:moduleInstance];
+        [eventModules sortUsingComparator:^NSComparisonResult(id<BHModuleProtocol> moduleInstance1, id<BHModuleProtocol> moduleInstance2) {
+            NSNumber *module1Level = @(BHModuleNormal);
+            NSNumber *module2Level = @(BHModuleNormal);
+            if ([moduleInstance1 respondsToSelector:@selector(basicModuleLevel)]) {
+                module1Level = @(BHModuleBasic);
+            }
+            if ([moduleInstance2 respondsToSelector:@selector(basicModuleLevel)]) {
+                module2Level = @(BHModuleBasic);
+            }
+            if (module1Level.integerValue != module2Level.integerValue) {
+                return module1Level.integerValue > module2Level.integerValue;
+            } else {
+                NSInteger module1Priority = 0;
+                NSInteger module2Priority = 0;
+                if ([moduleInstance1 respondsToSelector:@selector(modulePriority)]) {
+                    module1Priority = [moduleInstance1 modulePriority];
+                }
+                if ([moduleInstance2 respondsToSelector:@selector(modulePriority)]) {
+                    module2Priority = [moduleInstance2 modulePriority];
+                }
+                return module1Priority < module2Priority;
+            }
+        }];
     }
 }
 
