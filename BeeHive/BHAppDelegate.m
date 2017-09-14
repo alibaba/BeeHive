@@ -17,8 +17,12 @@
 #import <UserNotifications/UserNotifications.h>
 #endif
 
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
+@interface BHAppDelegate () <UNUserNotificationCenterDelegate>
+#else
 @interface BHAppDelegate ()
+#endif
+
 
 @end
 
@@ -29,13 +33,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
     [[BHModuleManager sharedManager] triggerEvent:BHMSetupEvent];
     [[BHModuleManager sharedManager] triggerEvent:BHMInitEvent];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[BHModuleManager sharedManager] triggerEvent:BHMSplashEvent];
     });
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 10.0f) {
+        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+    }
+#endif
     
 #ifdef DEBUG
     [[BHTimeProfiler sharedTimeProfiler] saveTimeProfileDataIntoFile:@"BeeHiveTimeProfiler"];
@@ -45,7 +53,7 @@
 }
 
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > 80400 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80400 
 
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
@@ -84,11 +92,12 @@
 {
     [[BeeHive shareInstance].context.openURLItem setOpenURL:url];
     [[BeeHive shareInstance].context.openURLItem setSourceApplication:sourceApplication];
+    [[BeeHive shareInstance].context.openURLItem setAnnotation:annotation];
     [[BHModuleManager sharedManager] triggerEvent:BHMOpenURLEvent];
     return YES;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > 80400
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80400
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
 {
   
@@ -136,10 +145,10 @@
     [[BHModuleManager sharedManager] triggerEvent:BHMDidReceiveLocalNotificationEvent];
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > 80000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 - (void)application:(UIApplication *)application didUpdateUserActivity:(NSUserActivity *)userActivity
 {
-    if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
+    if([UIDevice currentDevice].systemVersion.floatValue >= 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivity: userActivity];
         [[BHModuleManager sharedManager] triggerEvent:BHMDidUpdateUserActivityEvent];
     }
@@ -147,7 +156,7 @@
 
 - (void)application:(UIApplication *)application didFailToContinueUserActivityWithType:(NSString *)userActivityType error:(NSError *)error
 {
-    if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
+    if([UIDevice currentDevice].systemVersion.floatValue >= 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivityType: userActivityType];
         [[BeeHive shareInstance].context.userActivityItem setUserActivityError: error];
         [[BHModuleManager sharedManager] triggerEvent:BHMDidFailToContinueUserActivityEvent];
@@ -156,7 +165,7 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
-    if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
+    if([UIDevice currentDevice].systemVersion.floatValue >= 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivity: userActivity];
         [[BeeHive shareInstance].context.userActivityItem setRestorationHandler: restorationHandler];
         [[BHModuleManager sharedManager] triggerEvent:BHMContinueUserActivityEvent];
@@ -166,11 +175,18 @@
 
 - (BOOL)application:(UIApplication *)application willContinueUserActivityWithType:(NSString *)userActivityType
 {
-    if([UIDevice currentDevice].systemVersion.floatValue > 8.0f){
+    if([UIDevice currentDevice].systemVersion.floatValue >= 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivityType: userActivityType];
         [[BHModuleManager sharedManager] triggerEvent:BHMWillContinueUserActivityEvent];
     }
     return YES;
+}
+- (void)application:(UIApplication *)application handleWatchKitExtensionRequest:(nullable NSDictionary *)userInfo reply:(void(^)(NSDictionary * __nullable replyInfo))reply {
+    if([UIDevice currentDevice].systemVersion.floatValue >= 8.0f){
+        [BeeHive shareInstance].context.watchItem.userInfo = userInfo;
+        [BeeHive shareInstance].context.watchItem.replyHandler = reply;
+        [[BHModuleManager sharedManager] triggerEvent:BHMHandleWatchKitExtensionRequestEvent];
+    }
 }
 #endif
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 100000
