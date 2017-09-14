@@ -31,7 +31,7 @@
 class BeeHive; char * k##name##_mod BeeHiveDATA(BeehiveMods) = ""#name"";
 
 #define BeeHiveService(servicename,impl) \
-class BeeHive;char * k##servicename##_service BeeHiveDATA(BeehiveServices) = "{ \""#servicename"\" : \""#impl"\"}";
+class BeeHive; char * k##servicename##_service BeeHiveDATA(BeehiveServices) = "{ \""#servicename"\" : \""#impl"\"}";
 
 @interface BHAnnotation : NSObject
 

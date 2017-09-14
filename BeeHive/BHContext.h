@@ -55,6 +55,9 @@ typedef enum
 //user Activity Model
 @property (nonatomic, strong) BHUserActivityItem *userActivityItem;
 
+//watch Model
+@property (nonatomic, strong) BHWatchItem *watchItem;
+
 //custom param
 @property (nonatomic, copy) NSDictionary *customParam;
 
