@@ -278,14 +278,14 @@ static NSString *BHRURLGlobalScheme = nil;
                     !selector ||
                     ![mClass conformsToProtocol:@protocol(BHServiceProtocol)] ||
                     ![mClass conformsToProtocol:protocol] ||
-                    ![mClass respondsToSelector:selector]) {
+                    ![mClass instancesRespondToSelector:selector]) {
                     flag = NO;
                     *stop = NO;
                     return;
                 }
             } break;
             case BHRUsageJumpViewControler: {
-                if (![mClass isKindOfClass:[UIViewController class]]) {
+                if (![mClass isSubclassOfClass:[UIViewController class]]) {
                     flag = NO;
                     *stop = NO;
                     return;
@@ -591,22 +591,13 @@ static NSString *BHRURLGlobalScheme = nil;
               forTarget:(NSObject *)target
              withParams:(NSDictionary *)params
 {
-    NSMethodSignature * sig = [self methodSignatureForSelector:action];
+    NSMethodSignature * sig = [target methodSignatureForSelector:action];
     if (!sig) { return nil; }
     NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
     if (!inv) { return nil; }
     [inv setTarget:target];
     [inv setSelector:action];
-    NSArray<NSString *> *keys = params.allKeys;
-    keys = [keys sortedArrayUsingComparator:^NSComparisonResult(NSString *  _Nonnull obj1, NSString *  _Nonnull obj2) {
-        if (obj1.integerValue < obj2.integerValue) {
-            return NSOrderedAscending;
-        } else if (obj1.integerValue == obj2.integerValue) {
-            return NSOrderedSame;
-        } else {
-            return NSOrderedDescending;
-        }
-    }];
+    NSArray<NSString *> *keys = [params.allKeys sortedArrayUsingSelector:@selector(compare:)];
     [keys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         id value = params[obj];
         [inv setArgument:&value atIndex:idx+2];
