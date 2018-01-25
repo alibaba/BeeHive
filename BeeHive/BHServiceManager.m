@@ -86,6 +86,17 @@ static const NSString *kImpl = @"impl";
 
 - (id)createService:(Protocol *)service
 {
+    return [self createService:service withServiceName:nil];
+}
+
+- (id)createService:(Protocol *)service withServiceName:(NSString *)serviceName {
+    return [self createService:service withServiceName:serviceName shouldCache:YES];
+}
+
+- (id)createService:(Protocol *)service withServiceName:(NSString *)serviceName shouldCache:(BOOL)shouldCache {
+    if (!serviceName.length) {
+        serviceName = NSStringFromProtocol(service);
+    }
     id implInstance = nil;
     
     if (![self checkValidService:service]) {
@@ -95,10 +106,12 @@ static const NSString *kImpl = @"impl";
         
     }
     
-    NSString *serviceStr = NSStringFromProtocol(service);
-    id protocolImpl = [[BHContext shareInstance] getServiceInstanceFromServiceName:serviceStr];
-    if (protocolImpl) {
-        return protocolImpl;
+    NSString *serviceStr = serviceName;
+    if (shouldCache) {
+        id protocolImpl = [[BHContext shareInstance] getServiceInstanceFromServiceName:serviceStr];
+        if (protocolImpl) {
+            return protocolImpl;
+        }
     }
     
     Class implClass = [self serviceImplClass:service];
@@ -108,14 +121,27 @@ static const NSString *kImpl = @"impl";
                 implInstance = [[implClass class] shareInstance];
             else
                 implInstance = [[implClass alloc] init];
-            
-            [[BHContext shareInstance] addServiceWithImplInstance:implInstance serviceName:serviceStr];
-            return implInstance;
+            if (shouldCache) {
+                [[BHContext shareInstance] addServiceWithImplInstance:implInstance serviceName:serviceStr];
+                return implInstance;
+            } else {
+                return implInstance;
+            }
         }
     }
-    
     return [[implClass alloc] init];
 }
+
+- (id)getServiceInstanceFromServiceName:(NSString *)serviceName
+{
+    return [[BHContext shareInstance] getServiceInstanceFromServiceName:serviceName];
+}
+
+- (void)removeServiceWithServiceName:(NSString *)serviceName
+{
+    [[BHContext shareInstance] removeServiceWithServiceName:serviceName];
+}
+
 
 #pragma mark - private
 - (Class)serviceImplClass:(Protocol *)service
