@@ -467,7 +467,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     
     [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         __weak typeof(&*self) wself = self;
-        void ( ^ bk )();
+        void ( ^ bk )(void);
         bk = ^(){
             __strong typeof(&*self) sself = wself;
             if (sself) {
