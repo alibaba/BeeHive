@@ -597,16 +597,7 @@ static NSString *BHRURLGlobalScheme = nil;
     if (!inv) { return nil; }
     [inv setTarget:target];
     [inv setSelector:action];
-    NSArray<NSString *> *keys = params.allKeys;
-    keys = [keys sortedArrayUsingComparator:^NSComparisonResult(NSString *  _Nonnull obj1, NSString *  _Nonnull obj2) {
-        if (obj1.integerValue < obj2.integerValue) {
-            return NSOrderedAscending;
-        } else if (obj1.integerValue == obj2.integerValue) {
-            return NSOrderedSame;
-        } else {
-            return NSOrderedDescending;
-        }
-    }];
+    NSArray<NSString *> *keys = [params.allKeys sortedArrayUsingSelector:@selector(compare:)];
     [keys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         id value = params[obj];
         [inv setArgument:&value atIndex:idx+2];
