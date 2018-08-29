@@ -561,12 +561,6 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
            withSeletorStr:(NSString *)selectorStr
            andCustomParam:(NSDictionary *)customParam
 {
-    BHContext *context = [BHContext shareInstance].copy;
-    context.customParam = customParam;
-    context.customEvent = eventType;
-    if (!selectorStr.length) {
-        selectorStr = [self.BHSelectorByEvent objectForKey:@(BHMDidCustomEvent)];
-    }
     SEL seletor = NSSelectorFromString(selectorStr);
     if (!seletor) {
         selectorStr = [self.BHSelectorByEvent objectForKey:@(BHMDidCustomEvent)];
@@ -582,7 +576,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         if ([moduleInstance respondsToSelector:seletor]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            [moduleInstance performSelector:seletor withObject:context];
+            [moduleInstance performSelector:seletor withObject:[[BeeHive shareInstance].context copy]];
 #pragma clang diagnostic pop
             
             [[BHTimeProfiler sharedTimeProfiler] recordEventTime:[NSString stringWithFormat:@"%@ --- %@", [moduleInstance class], NSStringFromSelector(seletor)]];
