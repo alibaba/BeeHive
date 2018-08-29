@@ -458,7 +458,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     context.customParam = customParam;
     context.customEvent = BHMInitEvent;
     if(eventType >= BHMDidCustomEvent){ //系统自定义事件
-        [self handleModuleCustomEvent:eventType forTarget:target withSeletorStr:selectorStr andCustomParam:customParam];
+        [self handleModuleCustomEvent:eventType forTarget:target withSeletorStr:kAppCustomSelector andCustomParam:customParam];
     }
     NSArray<id<BHModuleProtocol>> *moduleInstances;
     if (target) {
