@@ -568,7 +568,7 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     if (target) {
         moduleInstances = @[target];
     } else {
-        moduleInstances = [self.BHModulesByEvent objectForKey:@(eventType)];
+        moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMDidCustomEvent)];
     }
     [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([moduleInstance respondsToSelector:seletor]) {
