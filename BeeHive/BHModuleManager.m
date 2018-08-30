@@ -527,6 +527,10 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
     BHContext *context = [BHContext shareInstance].copy;
     context.customParam = customParam;
     context.customEvent = eventType;
+    
+    if(eventType >= BHMDidCustomEvent){ //系统自定义事件调用
+        [self handleModuleCustomEvent:eventType forTarget:target withContext:context andCustomParam:customParam];
+    }
     if (!selectorStr.length) {
         selectorStr = [self.BHSelectorByEvent objectForKey:@(eventType)];
     }
@@ -553,6 +557,30 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
         }
     }];
 }
-
+//系统modDidCustomEvent 事件
+- (void)handleModuleCustomEvent:(NSInteger)eventType
+                      forTarget:(id<BHModuleProtocol>)target
+                    withContext:(BHContext *)context
+           andCustomParam:(NSDictionary *)customParam
+{
+    SEL seletor = NSSelectorFromString(kAppCustomSelector);
+    NSArray<id<BHModuleProtocol>> *moduleInstances;
+    if (target) {
+        moduleInstances = @[target];
+    } else {
+        moduleInstances = [self.BHModulesByEvent objectForKey:@(BHMDidCustomEvent)];
+    }
+    [moduleInstances enumerateObjectsUsingBlock:^(id<BHModuleProtocol> moduleInstance, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([moduleInstance respondsToSelector:seletor]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            [moduleInstance performSelector:seletor withObject:context];
+#pragma clang diagnostic pop
+            
+            [[BHTimeProfiler sharedTimeProfiler] recordEventTime:[NSString stringWithFormat:@"%@ --- %@", [moduleInstance class], NSStringFromSelector(seletor)]];
+            
+        }
+    }];
+}
 @end
 

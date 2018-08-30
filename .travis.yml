@@ -1,4 +1,4 @@
 language: objective-c
 xcode_project: BeeHive.xcodeproj 
 xcode_scheme: BeeHive
-xcode_sdk: iphonesimulator
+xcode_destination: platform=iOS Simulator,OS=9.3,name=iPhone 5s
