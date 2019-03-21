@@ -69,7 +69,7 @@ return @(ret); \
         };
             
         case '@': { // id
-            id ret = nil;
+            __unsafe_unretained id ret = nil;
             [inv getReturnValue:&ret];
             return ret;
         };
