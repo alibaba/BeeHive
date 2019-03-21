@@ -254,6 +254,9 @@ static NSString *BHRURLGlobalScheme = nil;
             return;
         }
         NSString *pathComponentKey = subPaths.firstObject;
+        if([pathComponentKey isEqualToString:@"/"]) {
+            return;
+        }
         if (router.pathComponentByKey[pathComponentKey]) {
             return;
         }
