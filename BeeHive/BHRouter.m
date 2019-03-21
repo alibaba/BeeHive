@@ -69,7 +69,7 @@ return @(ret); \
         };
             
         case '@': { // id
-            id ret = nil;
+            __unsafe_unretained id ret = nil;
             [inv getReturnValue:&ret];
             return ret;
         };
@@ -247,69 +247,76 @@ static NSString *BHRURLGlobalScheme = nil;
     __block BOOL flag = YES;
     
     [pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSArray<NSString *> * subPaths = [obj componentsSeparatedByString:BHRURLSubPathSplitPattern];
-        if (!subPaths.count) {
-            flag = NO;
-            *stop = NO;
-            return;
-        }
-        NSString *pathComponentKey = subPaths.firstObject;
-        if (router.pathComponentByKey[pathComponentKey]) {
-            return;
-        }
-        Class mClass = NSClassFromString(pathComponentKey);
-        if (!mClass) {
-            flag = NO;
-            *stop = NO;
-            return;
-        }
-        switch (usage) {
-            case BHRUsageCallService: {
-                if (subPaths.count < 3) {
-                    flag = NO;
-                    *stop = NO;
-                    return;
-                }
-                NSString *protocolStr = subPaths[1];
-                NSString *selectorStr = subPaths[2];
-                Protocol *protocol = NSProtocolFromString(protocolStr);
-                SEL selector = NSSelectorFromString(selectorStr);
-                if (!protocol ||
-                    !selector ||
-                    ![mClass conformsToProtocol:@protocol(BHServiceProtocol)] ||
-                    ![mClass conformsToProtocol:protocol] ||
-                    ![mClass instancesRespondToSelector:selector]) {
-                    flag = NO;
-                    *stop = NO;
-                    return;
-                }
-            } break;
-            case BHRUsageJumpViewControler: {
-                if (![mClass isSubclassOfClass:[UIViewController class]]) {
-                    flag = NO;
-                    *stop = NO;
-                    return;
-                }
-            } break;
-            case BHRUsageRegister: {
-                if (![mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
-                    return;
-                }
-                if (subPaths.count < 2) {
-                    flag = NO;
-                    *stop = NO;
-                    return;
-                }
-                NSString *protocolStr = subPaths[1];
-                Protocol *protocol = NSProtocolFromString(protocolStr);
-                if (!protocol || ![mClass conformsToProtocol:protocol]) {
-                    flag = NO;
-                    *stop = NO;
-                }
-            } break;
-                
-            default:
-                break;
+        
+        if (![obj isEqualToString:@"/"]) {
+            
+            NSArray<NSString *> * subPaths = [obj componentsSeparatedByString:BHRURLSubPathSplitPattern];
+            if (!subPaths.count) {
+                flag = NO;
+                *stop = NO;
+                return;
+            }
+            
+            NSString *pathComponentKey = subPaths.firstObject;
+            if (router.pathComponentByKey[pathComponentKey]) {
+                return;
+            }
+            
+            Class mClass = NSClassFromString(pathComponentKey);
+            if (!mClass) {
+                flag = NO;
+                *stop = NO;
+                return;
+            }
+            
+            switch (usage) {
+                case BHRUsageCallService: {
+                    if (subPaths.count < 3) {
+                        flag = NO;
+                        *stop = NO;
+                        return;
+                    }
+                    NSString *protocolStr = subPaths[1];
+                    NSString *selectorStr = subPaths[2];
+                    Protocol *protocol = NSProtocolFromString(protocolStr);
+                    SEL selector = NSSelectorFromString(selectorStr);
+                    if (!protocol ||
+                        !selector ||
+                        ![mClass conformsToProtocol:@protocol(BHServiceProtocol)] ||
+                        ![mClass conformsToProtocol:protocol] ||
+                        ![mClass instancesRespondToSelector:selector]) {
+                        flag = NO;
+                        *stop = NO;
+                        return;
+                    }
+                } break;
+                case BHRUsageJumpViewControler: {
+                    if (![mClass isSubclassOfClass:[UIViewController class]]) {
+                        flag = NO;
+                        *stop = NO;
+                        return;
+                    }
+                } break;
+                case BHRUsageRegister: {
+                    if (![mClass conformsToProtocol:@protocol(BHServiceProtocol)]) {
+                        return;
+                    }
+                    if (subPaths.count < 2) {
+                        flag = NO;
+                        *stop = NO;
+                        return;
+                    }
+                    NSString *protocolStr = subPaths[1];
+                    Protocol *protocol = NSProtocolFromString(protocolStr);
+                    if (!protocol || ![mClass conformsToProtocol:protocol]) {
+                        flag = NO;
+                        *stop = NO;
+                    }
+                } break;
+                    
+                default:
+                    break;
+            }
         }
     }];
     
