@@ -247,6 +247,9 @@ static NSString *BHRURLGlobalScheme = nil;
     __block BOOL flag = YES;
     
     [pathComponents enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isEqualToString:@"/"]) {
+            return;
+        }
         NSArray<NSString *> * subPaths = [obj componentsSeparatedByString:BHRURLSubPathSplitPattern];
         if (!subPaths.count) {
             flag = NO;
@@ -403,7 +406,7 @@ static NSString *BHRURLGlobalScheme = nil;
                     } else {
                         obj = [[mClass alloc] init];
                     }
-                    [obj setObject:obj forKey:finalParams];
+                    [self setObject:obj withPropertys:finalParams];
                     BOOL isLast = pathComponents.count - 1 ? YES : NO;
                     [self solveJumpWithViewController:(UIViewController *)obj andJumpMode:enterMode shouldAnimate:isLast];
                 } break;
