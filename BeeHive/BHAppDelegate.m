@@ -163,7 +163,7 @@
     }
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void(^)(NSArray<id<UIUserActivityRestoring>> * __nullable restorableObjects))restorationHandler
 {
     if([UIDevice currentDevice].systemVersion.floatValue >= 8.0f){
         [[BeeHive shareInstance].context.userActivityItem setUserActivity: userActivity];
@@ -197,7 +197,7 @@
     [[BHModuleManager sharedManager] triggerEvent:BHMWillPresentNotificationEvent];
 };
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler {
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler {
     [[BeeHive shareInstance].context.notificationsItem setNotificationResponse: response];
     [[BeeHive shareInstance].context.notificationsItem setNotificationCompletionHandler:completionHandler];
     [[BeeHive shareInstance].context.notificationsItem setCenter:center];
